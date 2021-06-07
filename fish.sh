@@ -354,7 +354,6 @@ casting(){
     clear
     echo "There is a cast ~~"
     sleep 0.5s
-
     clear
     echo "There is a cast ~~~"
     sleep 0.5s  
@@ -403,8 +402,8 @@ text_catcha(){
 
 waiting(){
 gen_env
-     while :
-     do
+#     while :
+#     do
         clear
         gen_catch
         if [ $CATCH == $ENV ]; then 
@@ -448,7 +447,7 @@ gen_env
             echo -e $WAITING_ANIMATION_2
             sleep 0.75s
         fi
-     done
+#     done
 }
 
 # Animation PocKlewKI BLEAT
