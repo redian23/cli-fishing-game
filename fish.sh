@@ -403,15 +403,15 @@ text_catcha(){
 
 waiting(){
 gen_env
-    while :
-    do
+     while :
+     do
         clear
         gen_catch
         if [ $CATCH == $ENV ]; then 
             text_catcha
             break;
         else
-            #echo $CATCH!=$ENV #DEBUG TAKT INFO  
+            #echo $CATCH!=$ENV #DEBUG TAKT INFO
             echo -e  $WAITING_ANIMATION_1
             sleep 0.75s
         fi
@@ -422,7 +422,7 @@ gen_env
             text_catcha
             break;
         else
-            #echo $CATCH!=$ENV #DEBUG TAKT INFO  
+            #echo $CATCH!=$ENV #DEBUG TAKT INFO
             echo -e $WAITING_ANIMATION_2
             sleep 0.75s
         fi
@@ -433,7 +433,7 @@ gen_env
             text_catcha
             break;
         else
-            #echo $CATCH!=$ENV #DEBUG TAKT INFO  
+            #echo $CATCH!=$ENV #DEBUG TAKT INFO
             echo -e $WAITING_ANIMATION_3
             sleep 0.75s
         fi
@@ -444,11 +444,11 @@ gen_env
             text_catcha
             break;
         else
-            #echo $CATCH!=$ENV #DEBUG TAKT INFO  
+            #echo $CATCH!=$ENV #DEBUG TAKT INFO
             echo -e $WAITING_ANIMATION_2
             sleep 0.75s
         fi
-    done
+     done
 }
 
 # Animation PocKlewKI BLEAT
@@ -495,6 +495,7 @@ got_off(){
 }
 
 caught(){
+    gen_weigth
     clear
     echo "We are caught! :)"
     echo -e $(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
