@@ -290,7 +290,7 @@ echo -e "\e[32mWelcome!\e[0m"
 echo "You are start to play in Console Fishing"
 echo "This is simlpe bash script, but to have so mach fun."
 echo -e "\e[33mCreate by Redian23\e[0m"
-echo -e "\e[31mVersion 0.2.12 beta\e[0m"
+echo -e "\e[31mVersion 0.3.1 beta\e[0m"
 sleep 5s
 
 #START GAME 
@@ -340,8 +340,8 @@ do
         "Quit")
             exit 0
             ;;
-        *) echo "invalid option $REPLY"
-            exit 0
+        *)  
+            echo "invalid option $REPLY"
             ;;
     esac
 done
@@ -378,16 +378,17 @@ WEIGHT=0
 
 gen_env(){
     ENV=$RANDOM
-    let "ENV %= $RANGE"  # Ограничение "сверху" числом $RANGE.
+    let "ENV %= $RANGE" 
 }
 
 gen_catch(){
     CATCH=$RANDOM
-    let "CATCH %= $RANGE"  # Ограничение "сверху" числом $RANGE.
+    let "CATCH %= $RANGE"  
 }
 
 gen_weigth(){
-    while [ "$WEIGHT" -le $FLOOR ]
+    local RANGE=15000
+    while [ "$WEIGHT" -le $FLOOR ]# Ограничение "снизк" числом $FLOOR.
     do
         WEIGHT=$RANDOM
         let "WEIGHT %= $RANGE"  # Ограничение "сверху" числом $RANGE.
@@ -512,51 +513,54 @@ result(){
 bite(){
 stty -echo
 PROGRESS=0
-BAR='>==============================================<'
-FLOOR=20
-RANGE=80
-number=0   #initialize
-    while [ "$number" -le $FLOOR ]
-    do
-        number=$RANDOM
-        let "number %= $RANGE"  # Ограничение "сверху" числом $RANGE.
-    done 
-   
+bar=''
 BITE_ANIMATION        
 
 press_F
 
-for (( i=1; i <= number; i++ )); do
-read -rsn1 -t 5 input 
+while true;
+do
+stty -echo
+read -rs -N 1 -t 1 input
+
     if [ "$input" = "f" ]; then     
         ((PROGRESS+=1))
-        let "PROGRESS+=1";
+        sleep 0.05
+        bar="${bar} "
+        
+        echo -ne "\r"
+        echo -ne "\e[46m$bar\e[0m"
+
+        left="$(( 100 - $PROGRESS ))"
+        printf " %${left}s"
+        echo -n "${PROGRESS}%"
     else
         ((PROGRESS-=1))
-        let "PROGRESS-=1";
+        sleep 0.05
+        bar="${bar} "
+        
+        echo -ne "\r"
+        echo -ne "\e[41m$bar\e[0m"
+        
+        left="$(( 100 + $PROGRESS ))"
+        printf " %${left}s"
+        echo -n "${PROGRESS}%"
     fi
 
-    if [ "$PROGRESS" = "50" ]; then     
+    if [ $PROGRESS = 100 ];then
         echo ""
         echo "What i'd catch ???"
-        sleep 2s
-        result         
-        break;
-    fi
-
-    if [ "$i" = "$number" ]; then
-        if [ "$PROGRESS" -le "0" ]; then
-        skip_bite
-        break;
-    else
-        clear
-        echo "don't have a time"
         sleep 3s
-        got_off 
+        result
         break;
-        fi
     fi
-echo -ne "\r${BAR:0:$PROGRESS}" # print $PROGRESS chars of $BAR from 0 position
+    
+    if [ $PROGRESS = -10 ];then
+        echo ""
+        echo "Your fish-rod is broken (T_T)"
+        sleep 3s
+        break;
+    fi
 done
 echo "" 
 }
