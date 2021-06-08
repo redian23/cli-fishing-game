@@ -318,7 +318,7 @@ do
                 sleep 5s
                 exit 0
             fi
-            money=200       #rewrite logic to money=money-100
+            ((money-=$price))       
             FISH_FOG_MAX_WEIGHT=5000
             echo "You are select Fish-rog 1; -100$"
             sleep 0.5s
@@ -331,7 +331,7 @@ do
                 sleep 5s
                 exit 0
             fi
-            money=50
+            ((money-=$price)) 
             FISH_FOG_MAX_WEIGHT=10000
             echo "You are select Fish-rog 1; -250$"
             sleep 0.5s
@@ -354,6 +354,7 @@ do
             ;;
     esac
 done
+game
 }
 
 #START GAME 
@@ -551,10 +552,11 @@ skip_bite(){
 }
 
 fish-rog_broken(){
+    stty -echo
     echo ""
     echo "Your fish-rod is broken (T_T)"
     sleep 5s
-    #add mogic money - prise 
+
     select_fish_rog
     sleep 3s
 }
