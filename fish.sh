@@ -286,11 +286,20 @@ echo -e "\e[32mWelcome!\e[0m"
 echo "You are start to play in Console Fishing"
 echo "This is simlpe bash script, but to have so mach fun."
 echo -e "\e[33mCreate by Redian23\e[0m"
-echo -e "\e[31mVersion 0.3.3 beta\e[0m"
+echo -e "\e[31mVersion 0.3.5 beta\e[0m"
+
 sleep 5s
 
-#Select fish-rog
+# Global initialize borders
+FLOOR=10
+RANGE=100
 
+#initialize variebles
+CATCH=0
+ENV=0
+FISH_WEIGHT=0
+
+#Select fish-rog
 FISH_FOG_MAX_WEIGHT=0
 money=300
 
@@ -312,38 +321,39 @@ select opt in "${fishrogs[@]}"
 do
     case $opt in
         "Fish-rog 1")
-            local prise=100
-            if [ "$money" -lt "$prise" ];then
+            if [ "$money" -lt "100" ];then
                 echo "You don't have a money. Sorry :("
                 sleep 5s
                 exit 0
             fi
-            ((money-=$price))       
+            ((money-=100))       
             FISH_FOG_MAX_WEIGHT=5000
             echo "You are select Fish-rog 1; -100$"
-            sleep 0.5s
+            sleep 1s
             break
             ;;
         "Fish-rog 2")
-            local prise=250
-            if [ "$money" -lt "$prise" ];then
+            if [ "$money" -lt "250" ];then
                 echo "You don't have a money. Sorry :("
                 sleep 5s
                 exit 0
             fi
-            ((money-=$price)) 
+            ((money-=250)) 
             FISH_FOG_MAX_WEIGHT=10000
-            echo "You are select Fish-rog 1; -250$"
-            sleep 0.5s
+            echo "You are select Fish-rog 2; -250$"
+            sleep 1s
             break
             ;;
         "Fish-rog 3")
-            local prise=450
-            if [ "$money" -lt "$prise" ];then
+            if [ "$money" -lt "450" ];then
                 echo "You don't have a money. Sorry :("
                 sleep 5s
                 exit 0
             fi
+            ((money-=450)) 
+            FISH_FOG_MAX_WEIGHT=20000
+            echo "You are select Fish-rog 3; -450$"
+            sleep 1s
             break
             ;;
         "Quit")
@@ -362,42 +372,52 @@ game
 select_position(){
 
 # Select one of many position of bobber
+
 clear
 echo "Please enter position your bobber:"
-positions=("Positions 1" "Positions 2" "Positions 3" "Quit")
+positions=("Small lake" "River" "Ocean" "Quit")
 select opt in "${positions[@]}"
 do
     case $opt in
-        "Positions 1")
-            echo "you chose position 1"
+        "Small lake")
+            RANGE=7500
+
             WAITING_ANIMATION_1=$WAITING_ANIMATION_POSITION1_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_POSITION1_2
             WAITING_ANIMATION_3=$WAITING_ANIMATION_POSITION1_3
             BITE_ANIMATION_1=$BITE_ANIMATION_POSITION1_1
             BITE_ANIMATION_2=$BITE_ANIMATION_POSITION1_2
             BITE_ANIMATION_3=$BITE_ANIMATION_POSITION1_3
+            
+            echo "you chose position 1"
             sleep 0.5s
             break
             ;;
-        "Positions 2")
-            echo "you chose position 2"
+        "River")
+            RANGE=12000
+
             WAITING_ANIMATION_1=$WAITING_ANIMATION_POSITION2_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_POSITION2_2
             WAITING_ANIMATION_3=$WAITING_ANIMATION_POSITION2_3
             BITE_ANIMATION_1=$BITE_ANIMATION_POSITION2_1
             BITE_ANIMATION_2=$BITE_ANIMATION_POSITION2_2
             BITE_ANIMATION_3=$BITE_ANIMATION_POSITION2_3
+            
+            echo "you chose position 2"
             sleep 0.5s
             break
             ;;
-        "Positions 3")
-            echo "you chose position 3"
+        "Ocean")
+            RANGE=40000
+
             WAITING_ANIMATION_1=$WAITING_ANIMATION_POSITION3_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_POSITION3_2
             WAITING_ANIMATION_3=$WAITING_ANIMATION_POSITION3_3
             BITE_ANIMATION_1=$BITE_ANIMATION_POSITION3_1
             BITE_ANIMATION_2=$BITE_ANIMATION_POSITION3_2
             BITE_ANIMATION_3=$BITE_ANIMATION_POSITION3_3
+
+            echo "you chose position 3"
             sleep 0.5s
             break
             ;;
@@ -431,15 +451,6 @@ casting(){
 
 # START Animation 
 
-# Global initialize borders
-FLOOR=10
-RANGE=100
-
-#initialize variebles
-CATCH=0
-ENV=0
-FISH_WEIGHT=0
-
 gen_env(){
     ENV=$RANDOM
     let "ENV %= $RANGE" 
@@ -448,16 +459,6 @@ gen_env(){
 gen_catch(){
     CATCH=$RANDOM
     let "CATCH %= $RANGE"  
-}
-
-gen_weigth(){
-FLOOR=10
-RANGE=15000
-    while [ "$FISH_WEIGHT" -le $FLOOR ]
-    do
-        FISH_WEIGHT=$RANDOM
-        let "FISH_WEIGHT %= $RANGE"  # Ограничение "сверху" числом $RANGE.
-    done
 }
 
 text_catcha(){
@@ -570,12 +571,13 @@ got_off(){
 }
 
 caught(){
-gen_weigth
+FISH_WEIGHT=$RANDOM
+let "FISH_WEIGHT %= $RANGE"
 
     if [ "$FISH_WEIGHT" -ge "$FISH_FOG_MAX_WEIGHT" ];then
         fish-rog_broken
         sleep 5s
-    else
+    else    
         clear
         echo "We are caught! :)"
         echo -e $(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
@@ -584,10 +586,43 @@ gen_weigth
     fi
 }
 
+get_coin(){
+    coin=$(($FISH_WEIGHT/100))
+    echo "Fish saled! You a get $coin$"
+    sleep 1s 
+    ((money+=$coin))
+}
+
+fish_sale(){
+stty echo
+    echo 'Sale fish or release fish"'
+    
+    select opt in sale release ; 
+    do
+        case $opt in
+        "sale")
+            get_coin
+            break
+            ;;
+        "release")
+            echo "Let to water..."
+            speep 3s
+            break
+            ;;
+        *) 
+            echo invalid option 
+            ;;
+        esac
+    done
+}
+
 result(){
     if (( RANDOM % 2 )); 
-        then got_off;
-        else caught; 
+        then 
+            got_off;
+        else 
+            caught
+            fish_sale; 
     fi
 }
 
@@ -635,22 +670,26 @@ read -rs -N 1 -t 1 input
         break;
     fi
 done
-echo "" 
 }
 
 #Notification Restart or Exit 
 quit(){
 stty echo
+
 clear
 echo "You have a $money$
 "
-echo 'Please select "Restart" or "Exit"'
-select opt in restart quit ; 
+echo 'Please select "Restart" or "Switch Fish-rog" or "Exit"'
+select opt in restart switch quit ; 
 do
      case $opt in
        "restart")
             echo "you chose restart" 
             game
+            ;;
+        "switch")
+            echo "you chose switch fish-rog" 
+            select_fish_rog
             ;;
         "quit")
             clear
@@ -663,7 +702,6 @@ done
 sleep 5s
 }
 
-#Inter on the game (like psvm in java)
 game(){
     select_position
     casting
@@ -673,5 +711,4 @@ game(){
 }
 
 select_fish_rog
-game #up method gamet
-
+game 
