@@ -4,7 +4,11 @@
 
 To start input:
 ```
-bash fish.sh
+./fish.sh
+```
+or 
+```
+bash fish.sh 
 ```
 ## Bug Report
 
