@@ -68,7 +68,6 @@ _________________________\n
 |_______________________|\n
 "
 
-
 BITE_ANIMATION_POSITION1_2="\n
 _________________________\n
 |\t\t\t                 |\n
@@ -159,7 +158,6 @@ _________________________\n
 |\t\t\t                 |\n
 |_______________________|\n
 "
-
 
 BITE_ANIMATION_POSITION2_2="\n
 _________________________\n
@@ -252,7 +250,6 @@ _________________________\n
 |_______________________|\n
 "
 
-
 BITE_ANIMATION_POSITION3_2="\n
 _________________________\n
 |\t\t\t                 |\n
@@ -283,15 +280,81 @@ _________________________\n
 |_______________________|\n
 "
 
-
 #Welcome
 clear
 echo -e "\e[32mWelcome!\e[0m" 
 echo "You are start to play in Console Fishing"
 echo "This is simlpe bash script, but to have so mach fun."
 echo -e "\e[33mCreate by Redian23\e[0m"
-echo -e "\e[31mVersion 0.3.1 beta\e[0m"
+echo -e "\e[31mVersion 0.3.3 beta\e[0m"
 sleep 5s
+
+#Select fish-rog
+
+FISH_FOG_MAX_WEIGHT=0
+money=300
+
+select_fish_rog(){
+stty echo
+
+clear
+echo -e "You are have a $money$"
+echo "
+List fish-ros:
+1. Price - 100$; Max Weith - 5kg; 
+2. Price - 250$; Max Weith - 10kg; 
+3. Price - 450$; Max Weith - 20kg; 
+
+Selecte Fish-rog:"
+
+fishrogs=("Fish-rog 1" "Fish-rog 2" "Fish-rog 3" "Quit")
+select opt in "${fishrogs[@]}"
+do
+    case $opt in
+        "Fish-rog 1")
+            local prise=100
+            if [ "$money" -lt "$prise" ];then
+                echo "You don't have a money. Sorry :("
+                sleep 5s
+                exit 0
+            fi
+            money=200       #rewrite logic to money=money-100
+            FISH_FOG_MAX_WEIGHT=5000
+            echo "You are select Fish-rog 1; -100$"
+            sleep 0.5s
+            break
+            ;;
+        "Fish-rog 2")
+            local prise=250
+            if [ "$money" -lt "$prise" ];then
+                echo "You don't have a money. Sorry :("
+                sleep 5s
+                exit 0
+            fi
+            money=50
+            FISH_FOG_MAX_WEIGHT=10000
+            echo "You are select Fish-rog 1; -250$"
+            sleep 0.5s
+            break
+            ;;
+        "Fish-rog 3")
+            local prise=450
+            if [ "$money" -lt "$prise" ];then
+                echo "You don't have a money. Sorry :("
+                sleep 5s
+                exit 0
+            fi
+            break
+            ;;
+        "Quit")
+            exit 0
+            ;;
+        *)  
+            echo "invalid option $REPLY"
+            ;;
+    esac
+done
+}
 
 #START GAME 
 
@@ -367,14 +430,14 @@ casting(){
 
 # START Animation 
 
-#initialize borders
+# Global initialize borders
 FLOOR=10
 RANGE=100
 
 #initialize variebles
 CATCH=0
 ENV=0
-WEIGHT=0
+FISH_WEIGHT=0
 
 gen_env(){
     ENV=$RANDOM
@@ -387,11 +450,12 @@ gen_catch(){
 }
 
 gen_weigth(){
-    local RANGE=15000
-    while [ "$WEIGHT" -le $FLOOR ]# Ограничение "снизк" числом $FLOOR.
+FLOOR=10
+RANGE=15000
+    while [ "$FISH_WEIGHT" -le $FLOOR ]
     do
-        WEIGHT=$RANDOM
-        let "WEIGHT %= $RANGE"  # Ограничение "сверху" числом $RANGE.
+        FISH_WEIGHT=$RANDOM
+        let "FISH_WEIGHT %= $RANGE"  # Ограничение "сверху" числом $RANGE.
     done
 }
 
@@ -486,6 +550,15 @@ skip_bite(){
     sleep 5s
 }
 
+fish-rog_broken(){
+    echo ""
+    echo "Your fish-rod is broken (T_T)"
+    sleep 5s
+    #add mogic money - prise 
+    select_fish_rog
+    sleep 3s
+}
+
 got_off(){ 
     clear
     echo "Got off fish :("
@@ -495,12 +568,18 @@ got_off(){
 }
 
 caught(){
-    gen_weigth
-    clear
-    echo "We are caught! :)"
-    echo -e $(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
-    echo "WEIGHT: $WEIGHT g."
-    sleep 5s
+gen_weigth
+
+    if [ "$FISH_WEIGHT" -ge "$FISH_FOG_MAX_WEIGHT" ];then
+        fish-rog_broken
+        sleep 5s
+    else
+        clear
+        echo "We are caught! :)"
+        echo -e $(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
+        echo "WEIGHT: $FISH_WEIGHT g."
+        sleep 5s
+    fi
 }
 
 result(){
@@ -515,8 +594,8 @@ stty -echo
 PROGRESS=0
 bar=''
 
-    BITE_ANIMATION        
-    press_F
+BITE_ANIMATION        
+press_F
 
 while true;
 do
@@ -550,9 +629,7 @@ read -rs -N 1 -t 1 input
     fi
     
     if [ $PROGRESS = -10 ];then
-        echo ""
-        echo "Your fish-rod is broken (T_T)"
-        sleep 3s
+        skip_bite
         break;
     fi
 done
@@ -562,9 +639,10 @@ echo ""
 #Notification Restart or Exit 
 quit(){
 stty echo
-clear 
-echo "Restart or Exit "
-echo 'Please enter your choice'
+clear
+echo "You have a $money$
+"
+echo 'Please select "Restart" or "Exit"'
 select opt in restart quit ; 
 do
      case $opt in
@@ -592,5 +670,6 @@ game(){
     quit
 }
 
+select_fish_rog
 game #up method gamet
 
