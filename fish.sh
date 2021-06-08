@@ -287,7 +287,6 @@ echo "You are start to play in Console Fishing"
 echo "This is simlpe bash script, but to have so mach fun."
 echo -e "\e[33mCreate by Redian23\e[0m"
 echo -e "\e[31mVersion 0.3.5 beta\e[0m"
-
 sleep 5s
 
 # Global initialize borders
@@ -588,9 +587,9 @@ let "FISH_WEIGHT %= $RANGE"
 
 get_coin(){
     coin=$(($FISH_WEIGHT/100))
+    ((money+=$coin))
     echo "Fish saled! You a get $coin$"
     sleep 1s 
-    ((money+=$coin))
 }
 
 fish_sale(){
@@ -685,10 +684,12 @@ do
      case $opt in
        "restart")
             echo "you chose restart" 
+            sleep 1s
             game
             ;;
         "switch")
-            echo "you chose switch fish-rog" 
+            echo "you chose switch fish-rog"
+            sleep 1s 
             select_fish_rog
             ;;
         "quit")
