@@ -514,25 +514,22 @@ bite(){
 stty -echo
 PROGRESS=0
 bar=''
-BITE_ANIMATION        
 
-press_F
+    BITE_ANIMATION        
+    press_F
 
 while true;
 do
 stty -echo
 read -rs -N 1 -t 1 input
 
-    if [ "$input" = "f" ]; then     
+    if [ "$input" = "f" ] || [ "$input" = "а" ]; then     # Russian "a" on key button F 
         ((PROGRESS+=1))
         sleep 0.05
         bar="${bar} "
         
         echo -ne "\r"
         echo -ne "\e[46m$bar\e[0m"
-
-        left="$(( 100 - $PROGRESS ))"
-        printf " %${left}s"
         echo -n "${PROGRESS}%"
     else
         ((PROGRESS-=1))
@@ -541,9 +538,6 @@ read -rs -N 1 -t 1 input
         
         echo -ne "\r"
         echo -ne "\e[41m$bar\e[0m"
-        
-        left="$(( 100 + $PROGRESS ))"
-        printf " %${left}s"
         echo -n "${PROGRESS}%"
     fi
 
