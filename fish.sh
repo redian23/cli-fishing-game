@@ -1,292 +1,14 @@
 #!/bin/bash
-
-#TODO
-# раскрасить ехо
-# картинки рыб
-# 
-# 
-#
-
-#SPREY'S
-
-WAITING_ANIMATION_POSITION1_1="\n
-_________________________\n
-|\t\t\t			        |\n 
-|\t\t\t			        |\n
-|\t\t  \  \t		    |\n
-|\t\t  o  \t 		    |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|_______________________|\n 
-"
-WAITING_ANIMATION_POSITION1_2="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t  |  \t            |\n
-|\t\t  o  \t            |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-WAITING_ANIMATION_POSITION1_3="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t  /  \t            |\n
-|\t\t  o  \t            |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-BITE_ANIMATION_POSITION1_1="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t  (o)  \t          |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-BITE_ANIMATION_POSITION1_2="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t( o ) \t           |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-BITE_ANIMATION_POSITION1_3="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t (   o   )\t       |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-##/-----------------------------------/
-
-WAITING_ANIMATION_POSITION2_1="\n
-_________________________\n
-|\t\t\t			        |\n 
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t  \  \t\t		    |\n
-|\t  o  \t\t 		    |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|_______________________|\n 
-"
-WAITING_ANIMATION_POSITION2_2="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t  |  \t\t            |\n
-|\t  o  \t\t            |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-WAITING_ANIMATION_POSITION2_3="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t  /  \t\t            |\n
-|\t  o  \t\t            |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-BITE_ANIMATION_POSITION2_1="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t  (o)  \t\t          |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-BITE_ANIMATION_POSITION2_2="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t( o ) \t\t           |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-BITE_ANIMATION_POSITION2_3="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t (   o   )\t\t       |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-##/-----------------------------------/
-
-WAITING_ANIMATION_POSITION3_1="\n
-_________________________\n
-|\t\t\t			        |\n 
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t    \  \t		    |\n
-|\t\t    o  \t		    |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|\t\t\t			        |\n
-|_______________________|\n 
-"
-WAITING_ANIMATION_POSITION3_2="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t    |  \t          |\n
-|\t\t    o  \t          |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-WAITING_ANIMATION_POSITION3_3="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t    /  \t          |\n 
-|\t\t    o  \t          |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-BITE_ANIMATION_POSITION3_1="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t    (o)   \t       |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-BITE_ANIMATION_POSITION3_2="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t   ( o )   \t      |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
-
-BITE_ANIMATION_POSITION3_3="\n
-_________________________\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t   (   o   ) \t    |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|\t\t\t                 |\n
-|_______________________|\n
-"
+source pics.sh
 
 #Welcome
 clear
+echo -e $WELCOME
 echo -e "\e[32mWelcome!\e[0m" 
 echo "You are start to play in Console Fishing"
 echo "This is simlpe bash script, but to have so mach fun."
 echo -e "\e[33mCreate by Redian23\e[0m"
-echo -e "\e[31mVersion 0.3.5 beta\e[0m"
+echo -e "\e[31mVersion 0.4.1 beta\e[0m"
 sleep 5s
 
 # Global initialize borders
@@ -368,18 +90,132 @@ game
 
 #START GAME 
 
-select_position(){
-
 # Select one of many position of bobber
 
-clear
+lake_positions(){
 echo "Please enter position your bobber:"
-positions=("Small lake" "River" "Ocean" "Quit")
+positions=("Place 1" "Place 2" "Place 3" "Quit")
 select opt in "${positions[@]}"
 do
     case $opt in
-        "Small lake")
+        "Place 1")
+            RANGE=6500
+
+            WAITING_ANIMATION_1=$WAITING_ANIMATION_LAKE_POSITION1_1
+            WAITING_ANIMATION_2=$WAITING_ANIMATION_LAKE_POSITION1_2
+            WAITING_ANIMATION_3=$WAITING_ANIMATION_LAKE_POSITION1_3
+            BITE_ANIMATION_1=$BITE_ANIMATION_LAKE_POSITION1_1
+            BITE_ANIMATION_2=$BITE_ANIMATION_LAKE_POSITION1_2
+            BITE_ANIMATION_3=$BITE_ANIMATION_LAKE_POSITION1_3
+            
+            echo "you chose position 1"
+            sleep 0.5s
+            break
+            ;;
+        "Place 2")
             RANGE=7500
+
+            WAITING_ANIMATION_1=$WAITING_ANIMATION_LAKE_POSITION2_1
+            WAITING_ANIMATION_2=$WAITING_ANIMATION_LAKE_POSITION2_2
+            WAITING_ANIMATION_3=$WAITING_ANIMATION_LAKE_POSITION2_3
+            BITE_ANIMATION_1=$BITE_ANIMATION_LAKE_POSITION2_1
+            BITE_ANIMATION_2=$BITE_ANIMATION_LAKE_POSITION2_2
+            BITE_ANIMATION_3=$BITE_ANIMATION_LAKE_POSITION2_3
+            
+            echo "you chose position 2"
+            sleep 0.5s
+            break
+            ;;
+        "Place 3")
+            RANGE=8500
+
+            WAITING_ANIMATION_1=$WAITING_ANIMATION_LAKE_POSITION3_1
+            WAITING_ANIMATION_2=$WAITING_ANIMATION_LAKE_POSITION3_2
+            WAITING_ANIMATION_3=$WAITING_ANIMATION_LAKE_POSITION3_3
+            BITE_ANIMATION_1=$BITE_ANIMATION_LAKE_POSITION3_1
+            BITE_ANIMATION_2=$BITE_ANIMATION_LAKE_POSITION3_2
+            BITE_ANIMATION_3=$BITE_ANIMATION_LAKE_POSITION3_3
+
+            echo "you chose position 3"
+            sleep 0.5s
+            break
+            ;;
+        "Quit")
+            exit 0
+            ;;
+        *)  
+            echo "invalid option $REPLY"
+            ;;
+    esac
+done
+}
+
+river_positions(){
+echo "Please enter position your bobber:"
+positions=("Place 1" "Place 2" "Place 3" "Quit")
+select opt in "${positions[@]}"
+do
+    case $opt in
+        "Place 1")
+            RANGE=7500
+
+            WAITING_ANIMATION_1=$WAITING_ANIMATION_RIVER_POSITION1_1
+            WAITING_ANIMATION_2=$WAITING_ANIMATION_RIVER_POSITION1_2
+            WAITING_ANIMATION_3=$WAITING_ANIMATION_RIVER_POSITION1_3
+            BITE_ANIMATION_1=$BITE_ANIMATION_RIVER_POSITION1_1
+            BITE_ANIMATION_2=$BITE_ANIMATION_RIVER_POSITION1_2
+            BITE_ANIMATION_3=$BITE_ANIMATION_RIVER_POSITION1_3
+            
+            echo "you chose position 1"
+            sleep 0.5s
+            break
+            ;;
+        "Place 2")
+            RANGE=9000
+
+            WAITING_ANIMATION_1=$WAITING_ANIMATION_RIVER_POSITION2_1
+            WAITING_ANIMATION_2=$WAITING_ANIMATION_RIVER_POSITION2_2
+            WAITING_ANIMATION_3=$WAITING_ANIMATION_RIVER_POSITION2_3
+            BITE_ANIMATION_1=$BITE_ANIMATION_RIVER_POSITION2_1
+            BITE_ANIMATION_2=$BITE_ANIMATION_RIVER_POSITION2_2
+            BITE_ANIMATION_3=$BITE_ANIMATION_RIVER_POSITION2_3
+            
+            echo "you chose position 2"
+            sleep 0.5s
+            break
+            ;;
+        "Place 3")
+            RANGE=11000
+
+            WAITING_ANIMATION_1=$WAITING_ANIMATION_RIVER_POSITION3_1
+            WAITING_ANIMATION_2=$WAITING_ANIMATION_RIVER_POSITION3_2
+            WAITING_ANIMATION_3=$WAITING_ANIMATION_RIVER_POSITION3_3
+            BITE_ANIMATION_1=$BITE_ANIMATION_RIVER_POSITION3_1
+            BITE_ANIMATION_2=$BITE_ANIMATION_RIVER_POSITION3_2
+            BITE_ANIMATION_3=$BITE_ANIMATION_RIVER_POSITION3_3
+
+            echo "you chose position 3"
+            sleep 0.5s
+            break
+            ;;
+        "Quit")
+            exit 0
+            ;;
+        *)  
+            echo "invalid option $REPLY"
+            ;;
+    esac
+done
+}
+
+ocean_positions(){
+echo "Please enter position your bobber:"
+positions=("Place 1" "Place 2" "Place 3" "Quit")
+select opt in "${positions[@]}"
+do
+    case $opt in
+        "Place 1")
+            RANGE=15000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_POSITION1_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_POSITION1_2
@@ -392,8 +228,8 @@ do
             sleep 0.5s
             break
             ;;
-        "River")
-            RANGE=12000
+        "Place 2")
+            RANGE=20000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_POSITION2_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_POSITION2_2
@@ -406,8 +242,8 @@ do
             sleep 0.5s
             break
             ;;
-        "Ocean")
-            RANGE=40000
+        "Place 3")
+            RANGE=25000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_POSITION3_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_POSITION3_2
@@ -418,6 +254,41 @@ do
 
             echo "you chose position 3"
             sleep 0.5s
+            break
+            ;;
+        "Quit")
+            exit 0
+            ;;
+        *)  
+            echo "invalid option $REPLY"
+            ;;
+    esac
+done
+}
+
+select_position(){
+clear
+echo "Please enter position for fishing:"
+positions=("Small lake" "River" "Ocean" "Quit")
+select opt in "${positions[@]}"
+do
+    case $opt in
+        "Small lake")
+            echo -e "you chose Lake \n"
+            sleep 0.5s
+            lake_positions
+            break
+            ;;
+        "River")
+            echo -e "you chose river \n"
+            sleep 0.5s
+            river_positions
+            break
+            ;;
+        "Ocean")
+            echo -e "you chose ocean \n"
+            sleep 0.5s
+            ocean_positions
             break
             ;;
         "Quit")
@@ -573,7 +444,7 @@ caught(){
 FISH_WEIGHT=$RANDOM
 let "FISH_WEIGHT %= $RANGE"
 
-    if [ "$FISH_WEIGHT" -ge "$FISH_FOG_MAX_WEIGHT" ];then
+    if [ "$FISH_WEIGHT" -ge "$FISH_FOG_MAX_WEIGaXiN7duXHT" ];then
         fish-rog_broken
         sleep 5s
     else    
@@ -605,7 +476,7 @@ stty echo
             ;;
         "release")
             echo "Let to water..."
-            speep 3s
+            sleep 3s
             break
             ;;
         *) 
