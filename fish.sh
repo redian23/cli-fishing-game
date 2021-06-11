@@ -1,15 +1,18 @@
 #!/bin/bash
 source pics.sh
+stty -echo
 
 #Welcome
 clear
 echo -e $WELCOME
 echo -e "\e[32mWelcome!\e[0m" 
-echo "You are start to play in Console Fishing"
-echo "This is simlpe bash script, but to have so mach fun."
+echo -e "You are start to play in Console Fishing"
+echo -e "This is simlpe bash script, but to have so mach fun."
 echo -e "\e[33mCreate by Redian23\e[0m"
 echo -e "\e[31mVersion 0.4.1 beta\e[0m"
-sleep 5s
+echo -e ""
+echo -e "\e[32mFor comfort play, please, open terminal on FullScreen\e[0m"
+sleep 10s
 
 # Global initialize borders
 FLOOR=10
@@ -19,33 +22,63 @@ RANGE=100
 CATCH=0
 ENV=0
 FISH_WEIGHT=0
+position=''
 
 #Select fish-rog
 FISH_FOG_MAX_WEIGHT=0
-
 #money=300
 money=500
 
-position=''
+#Button on board
+key_1=''
+key_2=''
+
+select_key_mapping(){
+stty echo
+echo -e "Select key mapping:"
+    select opt in "Key 'F'" "Key 'Space'"; 
+    do
+        case $opt in
+        "Key 'F'")
+            key_1="f"
+            key_2="а"
+            echo -e "You are select key F"
+            sleep 3s
+            break
+            ;;
+        "Key 'Enter'")
+            key_1=$'\x20'
+            key_2=$'\x0a'
+            echo "You are select key Space"
+            sleep 3s
+            break
+            ;;
+        *) 
+            echo invalid option 
+            ;;
+        esac
+    done
+}
 
 select_fish_rog(){
 stty echo
 
 clear
-echo -e "You are have a $money$"
+echo -e "\e[33mYou are have a $money$\e[0m"
 echo "
 List fish-ros:
-1. Price - 100$; Max Weith - 5kg; 
-2. Price - 250$; Max Weith - 10kg; 
-3. Price - 450$; Max Weith - 20kg; 
+*  Name:                        Price:  Max Weith:
+1. Fish Liter N5;               100$;   5kg; 
+2. Fish Hunter Pro M10RT;       250$;   10kg; 
+3. Fish Kung Fu Master R20V;    450$;   20kg; 
 
 Selecte Fish-rog:"
 
-fishrogs=("Fish-rog 1" "Fish-rog 2" "Fish-rog 3" "Quit")
+fishrogs=("Fish Liter N5" "Fish Hunter Pro M10RT" "Fish Kung Fu Master R20V" "Quit")
 select opt in "${fishrogs[@]}"
 do
     case $opt in
-        "Fish-rog 1")
+        "Fish Liter N5")
             if [ "$money" -lt "100" ];then
                 echo "You don't have a money. Sorry :("
                 sleep 5s
@@ -53,11 +86,11 @@ do
             fi
             ((money-=100))       
             FISH_FOG_MAX_WEIGHT=5000
-            echo "You are select Fish-rog 1; -100$"
+            echo "You are select Fish Liter N5; -100$"
             sleep 1s
             break
             ;;
-        "Fish-rog 2")
+        "Fish Hunter Pro M10RT")
             if [ "$money" -lt "250" ];then
                 echo "You don't have a money. Sorry :("
                 sleep 5s
@@ -65,11 +98,11 @@ do
             fi
             ((money-=250)) 
             FISH_FOG_MAX_WEIGHT=10000
-            echo "You are select Fish-rog 2; -250$"
+            echo "You are select Fish Hunter Pro M10RT; -250$"
             sleep 1s
             break
             ;;
-        "Fish-rog 3")
+        "Fish Kung Fu Master R20V")
             if [ "$money" -lt "450" ];then
                 echo "You don't have a money. Sorry :("
                 sleep 5s
@@ -77,7 +110,7 @@ do
             fi
             ((money-=450)) 
             FISH_FOG_MAX_WEIGHT=20000
-            echo "You are select Fish-rog 3; -450$"
+            echo "You are select Fish Kung Fu Master R20V; -450$"
             sleep 1s
             break
             ;;
@@ -278,21 +311,24 @@ select opt in "${positions[@]}"
 do
     case $opt in
         "Small lake")
-            $position='lake_positions'
+            position='lake_positions'
+            
             echo -e "you chose Lake \n"
             sleep 0.5s
             lake_positions
             break
             ;;
         "River")
-            $position='river_positions'
+            position='river_positions'
+            
             echo -e "you chose river \n"
             sleep 0.5s
             river_positions
             break
             ;;
         "Ocean")
-            $position='ocean_positions'
+            position='ocean_positions'
+            
             echo -e "you chose ocean \n"
             sleep 0.5s
             ocean_positions
@@ -448,18 +484,17 @@ got_off(){
 }
 
 fish_info(){
-
 lake_fishs=$(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
 ocean_fishs=$(shuf -n1 -e "\e[31mMackerel\e[0m" "\e[32mTuna\e[0m" "\e[33mFlounder\e[0m" "\e[34mHalibut\e[0m" "\e[34mShark\e[0m")
 
-        clear
-        echo "We are caught! :)"
+clear
+echo "We are caught! :)"
     if [ $position == "ocean_positions" ]; then
         echo -e $ocean_fishs
     else
         echo -e $lake_fishs
     fi
-        echo "WEIGHT: $FISH_WEIGHT g."
+echo "WEIGHT: $FISH_WEIGHT g."
 }
 
 caught(){
@@ -468,6 +503,8 @@ FISH_WEIGHT=$RANDOM
 let "FISH_WEIGHT %= $RANGE"
 
     if [ "$FISH_WEIGHT" -ge "$FISH_FOG_MAX_WEIGHT" ];then
+        
+        sleep 3s
         fish-rog_broken
         sleep 5s
     else    
@@ -528,8 +565,8 @@ while true;
 do
 stty -echo
 read -rs -N 1 -t 1 input
-
-    if [ "$input" = "f" ] || [ "$input" = "а" ]; then     # Russian "a" on key button F 
+    
+    if [ "$input" = "$key_1" ] || [ "$input" = "$key_2" ]; then     # Russian "a" on key button F 
         ((PROGRESS+=1))
         sleep 0.05
         bar="${bar} "
@@ -550,12 +587,14 @@ read -rs -N 1 -t 1 input
     if [ $PROGRESS = 100 ];then
         echo ""
         echo "What i'd catch ???"
+        
         sleep 3s
         result
         break;
     fi
     
     if [ $PROGRESS = -10 ];then
+        
         skip_bite
         break;
     fi
@@ -588,7 +627,8 @@ do
             echo "Exit..."
             exit 0 
             ;;
-        *) echo invalid option ;;
+        *) echo invalid option 
+            ;;
     esac
 done
 sleep 5s
@@ -596,11 +636,13 @@ sleep 5s
 
 game(){
     select_position
-    casting
-    waiting
+   # casting
+   # waiting
     bite
     quit
 }
 
+select_key_mapping
 select_fish_rog
+
 game 
