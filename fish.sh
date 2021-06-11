@@ -22,7 +22,11 @@ FISH_WEIGHT=0
 
 #Select fish-rog
 FISH_FOG_MAX_WEIGHT=0
-money=300
+
+#money=300
+money=500
+
+position=''
 
 select_fish_rog(){
 stty echo
@@ -274,18 +278,21 @@ select opt in "${positions[@]}"
 do
     case $opt in
         "Small lake")
+            $position='lake_positions'
             echo -e "you chose Lake \n"
             sleep 0.5s
             lake_positions
             break
             ;;
         "River")
+            $position='river_positions'
             echo -e "you chose river \n"
             sleep 0.5s
             river_positions
             break
             ;;
         "Ocean")
+            $position='ocean_positions'
             echo -e "you chose ocean \n"
             sleep 0.5s
             ocean_positions
@@ -440,18 +447,31 @@ got_off(){
     sleep 5s
 }
 
+fish_info(){
+
+lake_fishs=$(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
+ocean_fishs=$(shuf -n1 -e "\e[31mMackerel\e[0m" "\e[32mTuna\e[0m" "\e[33mFlounder\e[0m" "\e[34mHalibut\e[0m" "\e[34mShark\e[0m")
+
+        clear
+        echo "We are caught! :)"
+    if [ $position == "ocean_positions" ]; then
+        echo -e $ocean_fishs
+    else
+        echo -e $lake_fishs
+    fi
+        echo "WEIGHT: $FISH_WEIGHT g."
+}
+
 caught(){
+
 FISH_WEIGHT=$RANDOM
 let "FISH_WEIGHT %= $RANGE"
 
-    if [ "$FISH_WEIGHT" -ge "$FISH_FOG_MAX_WEIGaXiN7duXHT" ];then
+    if [ "$FISH_WEIGHT" -ge "$FISH_FOG_MAX_WEIGHT" ];then
         fish-rog_broken
         sleep 5s
     else    
-        clear
-        echo "We are caught! :)"
-        echo -e $(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
-        echo "WEIGHT: $FISH_WEIGHT g."
+        fish_info
         sleep 5s
     fi
 }
