@@ -1,4 +1,9 @@
 #!/bin/bash
+
+function clear {
+    echo -e '\033c'
+}
+
 source pics.sh
 stty -echo
 
@@ -7,48 +12,49 @@ clear
 echo -e $WELCOME
 echo -e "\e[32mWelcome!\e[0m" 
 echo -e "You are start to play in Console Fishing"
-echo -e "This is simlpe bash script, but to have so mach fun."
-echo -e "\e[33mCreate by Redian23\e[0m"
-echo -e "\e[31mVersion 0.4.1 beta\e[0m"
+echo -e "This is simple bash script, but to have so much fun."
+echo -e "\e[33mCreated by Redian23\e[0m"
+echo -e "\e[31mVersion 0.5.1 beta\e[0m"
 echo -e ""
 echo -e "\e[32mFor comfort play, please, open terminal on FullScreen\e[0m"
 sleep 10s
 
-# Global initialize borders
+#VALUES
+#initialize randome borders
 FLOOR=10
 RANGE=100
 
-#initialize variebles
+#initialize envirement values
+money=500
+position_index=''
+FISH_FOG_MAX_WEIGHT=0
+FISH_WEIGHT=0
 CATCH=0
 ENV=0
-FISH_WEIGHT=0
-position=''
-
-#Select fish-rog
-FISH_FOG_MAX_WEIGHT=0
-#money=300
-money=500
 
 #Button on board
 key_1=''
 key_2=''
+keyboard_key=''
 
-select_key_mapping(){
+key_map_menu(){
 stty echo
 echo -e "Select key mapping:"
     select opt in "Key 'F'" "Key 'Space'"; 
     do
         case $opt in
         "Key 'F'")
-            key_1="f"
-            key_2="а"
+            keyboard_key='F'
+            key_1="f"   #Eng
+            key_2="а"   #Rus
             echo -e "You are select key F"
             sleep 3s
             break
             ;;
-        "Key 'Enter'")
-            key_1=$'\x20'
-            key_2=$'\x0a'
+        "Key 'Space'")
+            keyboard_key='Space'
+            key_1=$'\x20'   #Space
+            key_2=$'\x0a'   #Enter
             echo "You are select key Space"
             sleep 3s
             break
@@ -58,13 +64,14 @@ echo -e "Select key mapping:"
             ;;
         esac
     done
+# Стоит ли добовлять пользовательский выбор клавиш?
 }
 
-select_fish_rog(){
+fish_rog_menu(){
 stty echo
 
 clear
-echo -e "\e[33mYou are have a $money$\e[0m"
+echo -e "\e[33mYou are have a ${money}$\e[0m"
 echo "
 List fish-ros:
 *  Name:                        Price:  Max Weith:
@@ -74,7 +81,7 @@ List fish-ros:
 
 Selecte Fish-rog:"
 
-fishrogs=("Fish Liter N5" "Fish Hunter Pro M10RT" "Fish Kung Fu Master R20V" "Quit")
+fishrogs=("Fish Liter N5" "Fish Hunter Pro M10RT" "Fish Kung Fu Master R20V")
 select opt in "${fishrogs[@]}"
 do
     case $opt in
@@ -114,9 +121,6 @@ do
             sleep 1s
             break
             ;;
-        "Quit")
-            exit 0
-            ;;
         *)  
             echo "invalid option $REPLY"
             ;;
@@ -131,7 +135,7 @@ game
 
 lake_positions(){
 echo "Please enter position your bobber:"
-positions=("Place 1" "Place 2" "Place 3" "Quit")
+positions=("Place 1" "Place 2" "Place 3")
 select opt in "${positions[@]}"
 do
     case $opt in
@@ -145,7 +149,7 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_LAKE_POSITION1_2
             BITE_ANIMATION_3=$BITE_ANIMATION_LAKE_POSITION1_3
             
-            echo "you chose position 1"
+            echo "you chose place 1"
             sleep 0.5s
             break
             ;;
@@ -159,7 +163,7 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_LAKE_POSITION2_2
             BITE_ANIMATION_3=$BITE_ANIMATION_LAKE_POSITION2_3
             
-            echo "you chose position 2"
+            echo "you chose place 2"
             sleep 0.5s
             break
             ;;
@@ -173,12 +177,9 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_LAKE_POSITION3_2
             BITE_ANIMATION_3=$BITE_ANIMATION_LAKE_POSITION3_3
 
-            echo "you chose position 3"
+            echo "you chose place 3"
             sleep 0.5s
             break
-            ;;
-        "Quit")
-            exit 0
             ;;
         *)  
             echo "invalid option $REPLY"
@@ -189,7 +190,7 @@ done
 
 river_positions(){
 echo "Please enter position your bobber:"
-positions=("Place 1" "Place 2" "Place 3" "Quit")
+positions=("Place 1" "Place 2" "Place 3")
 select opt in "${positions[@]}"
 do
     case $opt in
@@ -234,9 +235,6 @@ do
             echo "you chose position 3"
             sleep 0.5s
             break
-            ;;
-        "Quit")
-            exit 0
             ;;
         *)  
             echo "invalid option $REPLY"
@@ -303,15 +301,15 @@ do
 done
 }
 
-select_position(){
+position_menu(){
 clear
 echo "Please enter position for fishing:"
-positions=("Small lake" "River" "Ocean" "Quit")
+positions=("Small lake" "River" "Ocean")
 select opt in "${positions[@]}"
 do
     case $opt in
         "Small lake")
-            position='lake_positions'
+            position_index='lake_positions'
             
             echo -e "you chose Lake \n"
             sleep 0.5s
@@ -319,7 +317,7 @@ do
             break
             ;;
         "River")
-            position='river_positions'
+            position_index='river_positions'
             
             echo -e "you chose river \n"
             sleep 0.5s
@@ -327,15 +325,12 @@ do
             break
             ;;
         "Ocean")
-            position='ocean_positions'
+            position_index='ocean_positions'
             
             echo -e "you chose ocean \n"
             sleep 0.5s
             ocean_positions
             break
-            ;;
-        "Quit")
-            exit 0
             ;;
         *)  
             echo "invalid option $REPLY"
@@ -375,15 +370,15 @@ gen_catch(){
 }
 
 text_catcha(){
-    clear
-    echo "CCCCAAAATTCCHAAAAA!!!!!!"
+    echo -e ""
+    echo -e "CCCCAAAATTCCHAAAAA!!!!!!"
     sleep 1s
 }
 
 waiting(){
 gen_env
-#     while :
-#     do
+     while :
+     do
         clear
         gen_catch
         if [ $CATCH == $ENV ]; then 
@@ -427,51 +422,59 @@ gen_env
             echo -e $WAITING_ANIMATION_2
             sleep 0.75s
         fi
-#     done
+     done
 }
 
 # Animation PocKlewKI BLEAT
 
-BITE_ANIMATION(){
+bite_process(){    
+bite_animation_time=5
+while :
+do
+    stty -echo
+    read -rs -N 1 -t 1 input
+    ((bite_animation_time--))
+
+    if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then 
+        break;
+    fi
+
     clear
-        echo -e $BITE_ANIMATION_1   
-    sleep 1s
+        echo -e $BITE_ANIMATION_1
+        echo -e "\rTo catch fish press ${keyboard_key} ."   
+    sleep 0.5s
     clear
-        echo -e $BITE_ANIMATION_2  
-    sleep 1s
+        echo -e $BITE_ANIMATION_2
+        echo -e "\rTo catch fish press ${keyboard_key} .."
+    sleep 0.5s
     clear
-        echo -e $BITE_ANIMATION_3  
-    sleep 1s
+        echo -e $BITE_ANIMATION_3
+        echo -e "\rTo catch fish press ${keyboard_key} ..."
+    sleep 0.5s
     clear   
         echo -e $BITE_ANIMATION_2
-    sleep 1s
-}
+        echo -e "\rTo catch fish press ${keyboard_key} ...."
+    sleep 0.5s
 
-press_F(){
-    echo -ne "\rTo catch fish press 'F' ."
-    sleep 0.2s
-    echo -ne "\rTo catch fish press 'F' .."
-    sleep 0.2s
-    echo -ne "\rTo catch fish press 'F' ..."
-    sleep 0.2s
-    echo -ne "\rTo catch fish press 'F' ...."
-    echo ""
-    sleep 0.2s
+    if [ $bite_animation_time == 0 ]; then
+        echo -e "Time is over :?"
+        sleep 3s
+        skip_bite
+        break;
+    fi
+done
 }
 
 skip_bite(){
-    clear
-    echo "You are skiped bite (X_X)"
+    echo -e "\e[31mYou are skiped bite (X_X)\e[0m" 
     sleep 5s
 }
 
 fish-rog_broken(){
     stty -echo
-    echo ""
-    echo "Your fish-rod is broken (T_T)"
+    echo -e "\e[31mYour fish-rod is broken (T_T)\e[0m" 
     sleep 5s
-
-    select_fish_rog
+    fish_rog_menu
     sleep 3s
 }
 
@@ -484,29 +487,26 @@ got_off(){
 }
 
 fish_info(){
-lake_fishs=$(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
-ocean_fishs=$(shuf -n1 -e "\e[31mMackerel\e[0m" "\e[32mTuna\e[0m" "\e[33mFlounder\e[0m" "\e[34mHalibut\e[0m" "\e[34mShark\e[0m")
+lake_fish_list=$(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
+ocean_fish_list=$(shuf -n1 -e "\e[31mMackerel\e[0m" "\e[32mTuna\e[0m" "\e[33mFlounder\e[0m" "\e[34mHalibut\e[0m" "\e[34mShark\e[0m")
 
 clear
-echo "We are caught! :)"
-    if [ $position == "ocean_positions" ]; then
-        echo -e $ocean_fishs
-    else
-        echo -e $lake_fishs
-    fi
-echo "WEIGHT: $FISH_WEIGHT g."
+    echo "We are caught! :)"
+        if [ $position_index == "ocean_positions" ]; then
+            echo -e $ocean_fish_list
+        else
+            echo -e $lake_fish_list
+        fi
+    echo "WEIGHT: $FISH_WEIGHT g."
 }
 
 caught(){
-
 FISH_WEIGHT=$RANDOM
 let "FISH_WEIGHT %= $RANGE"
-
     if [ "$FISH_WEIGHT" -ge "$FISH_FOG_MAX_WEIGHT" ];then
-        
+        echo -e "Sooooo haaarrrddd........"
         sleep 3s
         fish-rog_broken
-        sleep 5s
     else    
         fish_info
         sleep 5s
@@ -516,14 +516,13 @@ let "FISH_WEIGHT %= $RANGE"
 get_coin(){
     coin=$(($FISH_WEIGHT/100))
     ((money+=$coin))
-    echo "Fish saled! You a get $coin$"
+    echo "Fish saled! You a get ${coin}$"
     sleep 1s 
 }
 
 fish_sale(){
 stty echo
     echo 'Sale fish or release fish"'
-    
     select opt in sale release ; 
     do
         case $opt in
@@ -553,24 +552,20 @@ result(){
     fi
 }
 
-bite(){
+playing_fish(){
 stty -echo
 PROGRESS=0
 bar=''
-               
-BITE_ANIMATION 
-press_F
 
 while true;
 do
 stty -echo
 read -rs -N 1 -t 1 input
     
-    if [ "$input" = "$key_1" ] || [ "$input" = "$key_2" ]; then     # Russian "a" on key button F 
+    if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then 
         ((PROGRESS+=1))
         sleep 0.05
         bar="${bar} "
-        
         echo -ne "\r"
         echo -ne "\e[46m$bar\e[0m"
         echo -n "${PROGRESS}%"
@@ -578,7 +573,6 @@ read -rs -N 1 -t 1 input
         ((PROGRESS-=1))
         sleep 0.05
         bar="${bar} "
-
         echo -ne "\r"
         echo -ne "\e[41m$bar\e[0m"
         echo -n "${PROGRESS}%"
@@ -587,14 +581,12 @@ read -rs -N 1 -t 1 input
     if [ $PROGRESS = 100 ];then
         echo ""
         echo "What i'd catch ???"
-        
         sleep 3s
         result
         break;
     fi
     
     if [ $PROGRESS = -10 ];then
-        
         skip_bite
         break;
     fi
@@ -602,27 +594,27 @@ done
 }
 
 #Notification Restart or Exit 
-quit(){
+quit_menu(){
 stty echo
 
 clear
-echo "You have a $money$
+echo "You have a ${money}$
 "
-echo 'Please select "Restart" or "Switch Fish-rog" or "Exit"'
-select opt in restart switch quit ; 
+echo -e 'Please select \e[44m"Restart"\e[0m or \e[45m"Switch Fish-rog"\e[0m or \e[46m"Quit of game\e[0m"'
+select opt in 'Restart' 'Switch' 'Quit'; 
 do
      case $opt in
-       "restart")
+       "Restart")
             echo "you chose restart" 
             sleep 1s
             game
             ;;
-        "switch")
+        "Switch")
             echo "you chose switch fish-rog"
             sleep 1s 
-            select_fish_rog
+            fish_rog_menu
             ;;
-        "quit")
+        "Quit")
             clear
             echo "Exit..."
             exit 0 
@@ -635,14 +627,15 @@ sleep 5s
 }
 
 game(){
-    select_position
-   # casting
-   # waiting
-    bite
-    quit
+    position_menu
+    casting
+    waiting
+    bite_process
+    playing_fish
+    quit_menu
 }
 
-select_key_mapping
-select_fish_rog
+key_map_menu
+fish_rog_menu
 
 game 
