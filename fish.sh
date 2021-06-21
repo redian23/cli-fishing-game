@@ -25,7 +25,7 @@ FLOOR=10
 RANGE=100
 
 #initialize envirement values
-money=500
+money=350
 position_index=''
 FISH_FOG_MAX_WEIGHT=0
 FISH_WEIGHT=0
@@ -36,6 +36,35 @@ ENV=0
 key_1=''
 key_2=''
 keyboard_key=''
+
+demo_mode_menu(){
+stty echo
+clear
+echo -e "\e[33mSettings :\e[0m
+"
+echo -e "Select Game Mode:"
+    select opt in "Demo" "Full Game"; 
+    do
+        case $opt in
+        "Demo")
+            DEMO_MODE=TRUE
+            echo -e "Demo mode ON"
+            sleep 2s
+            break
+            ;;
+        "Full Game")
+            DEMO_MODE=FASLE
+            echo -e "Full game mode ON
+            "
+            sleep 2s
+            break
+            ;;
+        *) 
+            echo invalid option 
+            ;;
+        esac
+    done
+}
 
 key_map_menu(){
 stty echo
@@ -88,7 +117,7 @@ do
         "Fish Liter N5")
             if [ "$money" -lt "100" ];then
                 echo "You don't have a money. Sorry :("
-                sleep 5s
+                sleep 3s
                 exit 0
             fi
             ((money-=100))       
@@ -100,8 +129,8 @@ do
         "Fish Hunter Pro M10RT")
             if [ "$money" -lt "250" ];then
                 echo "You don't have a money. Sorry :("
-                sleep 5s
-                exit 0
+                sleep 3s
+                fish_rog_menu
             fi
             ((money-=250)) 
             FISH_FOG_MAX_WEIGHT=10000
@@ -112,8 +141,8 @@ do
         "Fish Kung Fu Master R20V")
             if [ "$money" -lt "450" ];then
                 echo "You don't have a money. Sorry :("
-                sleep 5s
-                exit 0
+                sleep 3s
+                fish_rog_menu
             fi
             ((money-=450)) 
             FISH_FOG_MAX_WEIGHT=20000
@@ -626,16 +655,31 @@ done
 sleep 5s
 }
 
+
 game(){
-    position_menu
-    casting
-    waiting
-    bite_process
-    playing_fish
-    quit_menu
+    if [ $DEMO_MODE == 'TRUE' ];then
+        position_menu
+        casting
+        #waiting
+        bite_process
+        playing_fish
+        quit_menu
+    else
+        position_menu
+        casting
+        waiting
+        bite_process
+        playing_fish
+        quit_menu
+    fi
 }
 
-key_map_menu
+settings_menu(){
+    demo_mode_menu
+    key_map_menu
+}
+
+settings_menu
 fish_rog_menu
 
 game 
