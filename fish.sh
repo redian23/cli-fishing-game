@@ -19,15 +19,17 @@ echo -e ""
 echo -e "\e[32mFor comfort play, please, open terminal on FullScreen\e[0m"
 sleep 10s
 
+#------------------------------------------------------------/
+
 #VALUES
 #initialize randome borders
 FLOOR=10
 RANGE=100
 
 #initialize envirement values
-money=550
+money=350
 position_index=''
-FISH_FOG_MAX_WEIGHT=0
+FISH_ROD_MAX_WEIGHT=0
 FISH_WEIGHT=0
 CATCH=0
 ENV=0
@@ -36,6 +38,8 @@ ENV=0
 key_1=''
 key_2=''
 keyboard_key=''
+
+#------------------------------------------------------------/
 
 check_console_size(){
     local console_height="$(stty size | cut -c 1-3)"
@@ -110,22 +114,22 @@ echo -e "Select key mapping:"
     done
 }
 
-fish_rog_menu(){
+fish_rod_menu(){
 stty echo
 
 clear
 echo -e "\e[33mYou are have a ${money}$\e[0m"
 echo "
-List fish-ros:
+List fish-rod's:
 *  Name:                        Price:  Max Weith:
 1. Fish Liter N5;               100$;   5kg; 
 2. Fish Hunter Pro M10RT;       250$;   10kg; 
 3. Fish Kung Fu Master R20V;    450$;   20kg; 
 
-Selecte Fish-rog:"
+Selecte Fish-rod:"
 
-fishrogs=("Fish Liter N5" "Fish Hunter Pro M10RT" "Fish Kung Fu Master R20V")
-select opt in "${fishrogs[@]}"
+fish_rods_list=("Fish Liter N5" "Fish Hunter Pro M10RT" "Fish Kung Fu Master R20V")
+select opt in "${fish_rods_list[@]}"
 do
     case $opt in
         "Fish Liter N5")
@@ -135,7 +139,7 @@ do
                 exit 0
             fi
             ((money-=100))       
-            FISH_FOG_MAX_WEIGHT=5000
+            FISH_ROD_MAX_WEIGHT=5000
             echo "You are select Fish Liter N5; -100$"
             sleep 1s
             break
@@ -144,10 +148,10 @@ do
             if [ "$money" -lt "250" ];then
                 echo "You don't have a money. Sorry :("
                 sleep 3s
-                fish_rog_menu
+                fish_rod_menu
             fi
             ((money-=250)) 
-            FISH_FOG_MAX_WEIGHT=10000
+            FISH_ROD_MAX_WEIGHT=10000
             echo "You are select Fish Hunter Pro M10RT; -250$"
             sleep 1s
             break
@@ -156,10 +160,10 @@ do
             if [ "$money" -lt "450" ];then
                 echo "You don't have a money. Sorry :("
                 sleep 3s
-                fish_rog_menu
+                fish_rod_menu
             fi
             ((money-=450)) 
-            FISH_FOG_MAX_WEIGHT=20000
+            FISH_ROD_MAX_WEIGHT=20000
             echo "You are select Fish Kung Fu Master R20V; -450$"
             sleep 1s
             break
@@ -522,11 +526,11 @@ got_off(){
     quit_menu
 }
 
-fish-rog_broken(){
+fish_rod_broken(){
     stty -echo
     echo -e "\e[31mYour fish-rod is broken (T_T)\e[0m" 
     sleep 5s
-    fish_rog_menu
+    fish_rod_menu
 }
 
 gen_fish_weight(){
@@ -536,10 +540,10 @@ gen_fish_weight(){
 
 caught(){
 gen_fish_weight
-    if [ "$FISH_WEIGHT" -ge "$FISH_FOG_MAX_WEIGHT" ];then
+    if [ "$FISH_WEIGHT" -ge "$FISH_ROD_MAX_WEIGHT" ];then
         echo -e "Sooooo haaarrrddd........"
         sleep 3s
-        fish-rog_broken
+        fish_rod_broken
     else    
         fish_info
         sleep 5s
@@ -547,14 +551,14 @@ gen_fish_weight
 }
 
 lake_fish_selector(){
-    if [ "$FISH_WEIGHT" -lt "500" ];then
+    if [ "$FISH_WEIGHT" -lt "1000" ];then
         lake_fish=$(echo -e "\e[33mRoach\e[0m")
 
-        elif [ "$FISH_WEIGHT" -lt "1500" ];then
+        elif [ "$FISH_WEIGHT" -lt "2000" ];then
             lake_fish=$(echo -e "\e[32mRuff\e[0m")
 
-        elif [ "$FISH_WEIGHT" -lt "2500" ];then
-            lake_fish=$(echo -e "\e[31mCarpe\e[0m")
+        elif [ "$FISH_WEIGHT" -lt "3500" ];then
+            lake_fish=$(echo -e "\e[35mBream\e[0m")
 
         elif [ "$FISH_WEIGHT" -ge "4500" ];then
             if (( RANDOM % 2 )); 
@@ -567,16 +571,16 @@ lake_fish_selector(){
 }
 
 ocean_fish_selector(){
-    if [ "$FISH_WEIGHT" -lt "1500" ];then
+    if [ "$FISH_WEIGHT" -lt "2500" ];then
         ocean_fish=$(echo -e "\e[31mMackerel\e[0m")
         
-        elif [ "$FISH_WEIGHT" -lt "3500" ];then
+        elif [ "$FISH_WEIGHT" -lt "7500" ];then
             ocean_fish=$(echo -e "\e[32mTuna\e[0m")
         
-        elif [ "$FISH_WEIGHT" -lt "5500" ];then
+        elif [ "$FISH_WEIGHT" -lt "12500" ];then
             ocean_fish=$(echo -e "\e[33mFlounder\e[0m")
         
-        elif [ "$FISH_WEIGHT" -ge "7500" ];then
+        elif [ "$FISH_WEIGHT" -ge "15000" ];then
             if (( RANDOM % 2 )); 
             then 
                 ocean_fish=$(echo -e "\e[34mShark\e[0m");
@@ -689,7 +693,7 @@ stty echo
 clear
 echo "You have a ${money}$
 "
-echo -e 'Please select \e[44m"Restart"\e[0m or \e[45m"Switch Fish-rog"\e[0m or \e[46m"Quit of game\e[0m"'
+echo -e 'Please select \e[44m"Restart"\e[0m or \e[45m"Switch Fish-rod"\e[0m or \e[46m"Quit of game\e[0m"'
 select opt in 'Restart' 'Switch' 'Quit'; 
 do
      case $opt in
@@ -699,9 +703,9 @@ do
             game
             ;;
         "Switch")
-            echo "you chose switch fish-rog"
+            echo "you chose switch fish-rod"
             sleep 1s 
-            fish_rog_menu
+            fish_rod_menu
             ;;
         "Quit")
             clear
@@ -740,6 +744,6 @@ settings_menu(){
 
 check_console_size
 settings_menu
-fish_rog_menu
+fish_rod_menu
 
 game 
