@@ -484,7 +484,7 @@ do
 
     clear
         echo -e $BITE_ANIMATION_1
-        echo -e "\rTo catch fish hold down the ${keyboard_key} ."   
+        echo -e "\e[31mTo catch fish hold down the ${keyboard_key} .\e[0m"   
     sleep 0.5s
     clear
         echo -e $BITE_ANIMATION_2
@@ -492,7 +492,7 @@ do
     sleep 0.5s
     clear
         echo -e $BITE_ANIMATION_3
-        echo -e "\rTo catch fish hold down the ${keyboard_key} ..."
+        echo -e "\e[31mTo catch fish hold down the ${keyboard_key} ...\e[0m"  
     sleep 0.5s
     clear   
         echo -e $BITE_ANIMATION_2
@@ -503,7 +503,6 @@ do
         echo -e "Time is over :?"
         sleep 3s
         skip_bite
-        break;
     fi
 done
 }
@@ -511,6 +510,7 @@ done
 skip_bite(){
     echo -e "\e[31mYou are skiped bite (X_X)\e[0m" 
     sleep 5s
+    quit_menu
 }
 
 fish-rog_broken(){
@@ -527,6 +527,7 @@ got_off(){
     echo "Let's try again!"
     echo "Good Luck in next time!"
     sleep 5s
+    quit_menu
 }
 
 fish_info(){
@@ -678,14 +679,12 @@ game(){
         #waiting
         bite_process
         playing_fish
-        quit_menu
     else
         position_menu
         casting
         waiting
         bite_process
         playing_fish
-        quit_menu
     fi
 }
 
