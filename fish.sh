@@ -14,7 +14,7 @@ echo -e "\e[32mWelcome!\e[0m"
 echo -e "You are start to play in Console Fishing"
 echo -e "This is simple bash script, but to have so much fun."
 echo -e "\e[33mCreated by Redian23\e[0m"
-echo -e "\e[31mVersion 0.5.1 beta\e[0m"
+echo -e "\e[31mVersion 0.5.3 beta\e[0m"
 echo -e ""
 echo -e "\e[32mFor comfort play, please, open terminal on FullScreen\e[0m"
 sleep 10s
@@ -25,7 +25,7 @@ FLOOR=10
 RANGE=100
 
 #initialize envirement values
-money=350
+money=550
 position_index=''
 FISH_FOG_MAX_WEIGHT=0
 FISH_WEIGHT=0
@@ -81,6 +81,7 @@ echo -e "Select Game Mode:"
 
 key_map_menu(){
 stty echo
+
 echo -e ""
 echo -e "Select key mapping:"
     select opt in "Key 'F'" "Key 'Space'"; 
@@ -107,7 +108,6 @@ echo -e "Select key mapping:"
             ;;
         esac
     done
-# Стоит ли добовлять пользовательский выбор клавиш?
 }
 
 fish_rog_menu(){
@@ -513,14 +513,6 @@ skip_bite(){
     quit_menu
 }
 
-fish-rog_broken(){
-    stty -echo
-    echo -e "\e[31mYour fish-rod is broken (T_T)\e[0m" 
-    sleep 5s
-    fish_rog_menu
-    sleep 3s
-}
-
 got_off(){ 
     clear
     echo "Got off fish :("
@@ -530,23 +522,20 @@ got_off(){
     quit_menu
 }
 
-fish_info(){
-lake_fish_list=$(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
-ocean_fish_list=$(shuf -n1 -e "\e[31mMackerel\e[0m" "\e[32mTuna\e[0m" "\e[33mFlounder\e[0m" "\e[34mHalibut\e[0m" "\e[34mShark\e[0m")
+fish-rog_broken(){
+    stty -echo
+    echo -e "\e[31mYour fish-rod is broken (T_T)\e[0m" 
+    sleep 5s
+    fish_rog_menu
+}
 
-clear
-    echo "We are caught! :)"
-        if [ $position_index == "ocean_positions" ]; then
-            echo -e $ocean_fish_list
-        else
-            echo -e $lake_fish_list
-        fi
-    echo "WEIGHT: $FISH_WEIGHT g."
+gen_fish_weight(){
+    FISH_WEIGHT=$RANDOM
+    let "FISH_WEIGHT %= $RANGE"
 }
 
 caught(){
-FISH_WEIGHT=$RANDOM
-let "FISH_WEIGHT %= $RANGE"
+gen_fish_weight
     if [ "$FISH_WEIGHT" -ge "$FISH_FOG_MAX_WEIGHT" ];then
         echo -e "Sooooo haaarrrddd........"
         sleep 3s
@@ -555,6 +544,62 @@ let "FISH_WEIGHT %= $RANGE"
         fish_info
         sleep 5s
     fi
+}
+
+lake_fish_selector(){
+    if [ "$FISH_WEIGHT" -lt "500" ];then
+        lake_fish=$(echo -e "\e[33mRoach\e[0m")
+
+        elif [ "$FISH_WEIGHT" -lt "1500" ];then
+            lake_fish=$(echo -e "\e[32mRuff\e[0m")
+
+        elif [ "$FISH_WEIGHT" -lt "2500" ];then
+            lake_fish=$(echo -e "\e[31mCarpe\e[0m")
+
+        elif [ "$FISH_WEIGHT" -ge "4500" ];then
+            if (( RANDOM % 2 )); 
+            then 
+                lake_fish=$(echo -e "\e[31mCarpe\e[0m");
+            else 
+                lake_fish=$(echo -e "\e[34mPike\e[0m");
+            fi
+    fi
+}
+
+ocean_fish_selector(){
+    if [ "$FISH_WEIGHT" -lt "1500" ];then
+        ocean_fish=$(echo -e "\e[31mMackerel\e[0m")
+        
+        elif [ "$FISH_WEIGHT" -lt "3500" ];then
+            ocean_fish=$(echo -e "\e[32mTuna\e[0m")
+        
+        elif [ "$FISH_WEIGHT" -lt "5500" ];then
+            ocean_fish=$(echo -e "\e[33mFlounder\e[0m")
+        
+        elif [ "$FISH_WEIGHT" -ge "7500" ];then
+            if (( RANDOM % 2 )); 
+            then 
+                ocean_fish=$(echo -e "\e[34mShark\e[0m");
+            else 
+                ocean_fish=$(echo -e "\e[34mHalibut\e[0m");
+            fi
+    fi
+}
+
+fish_info(){
+#lake_fish_list=$(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
+#ocean_fish_list=$(shuf -n1 -e "\e[31mMackerel\e[0m" "\e[32mTuna\e[0m" "\e[33mFlounder\e[0m" "\e[34mHalibut\e[0m" "\e[34mShark\e[0m")
+    
+clear
+    echo "We are caught! :)"
+        if [ $position_index == "ocean_positions" ]; then
+            ocean_fish_selector
+            echo -e $ocean_fish
+        else
+            lake_fish_selector
+            echo -e $lake_fish
+        fi
+    echo "WEIGHT: $FISH_WEIGHT g."
 }
 
 get_coin(){
@@ -580,7 +625,7 @@ stty echo
             break
             ;;
         *) 
-            echo invalid option 
+            echo "invalid option $REPLY"
             ;;
         esac
     done
@@ -589,10 +634,10 @@ stty echo
 result(){
     if (( RANDOM % 2 )); 
         then 
-            got_off;
-        else 
             caught
             fish_sale; 
+        else 
+            got_off;
     fi
 }
 
