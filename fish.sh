@@ -551,16 +551,16 @@ gen_fish_weight
 }
 
 lake_fish_selector(){
-    if [ "$FISH_WEIGHT" -lt "1000" ];then
+    if [ "$FISH_WEIGHT" -le "1000" ];then
         lake_fish=$(echo -e "\e[33mRoach\e[0m")
 
-        elif [ "$FISH_WEIGHT" -lt "2000" ];then
+        elif [ "$FISH_WEIGHT" -le "2000" ];then
             lake_fish=$(echo -e "\e[32mRuff\e[0m")
 
-        elif [ "$FISH_WEIGHT" -lt "3500" ];then
+        elif [ "$FISH_WEIGHT" -le "3500" ];then
             lake_fish=$(echo -e "\e[35mBream\e[0m")
 
-        elif [ "$FISH_WEIGHT" -ge "4500" ];then
+        elif [ "$FISH_WEIGHT" -ge "3500" ];then
             if (( RANDOM % 2 )); 
             then 
                 lake_fish=$(echo -e "\e[31mCarpe\e[0m");
@@ -571,16 +571,16 @@ lake_fish_selector(){
 }
 
 ocean_fish_selector(){
-    if [ "$FISH_WEIGHT" -lt "2500" ];then
+    if [ "$FISH_WEIGHT" -le "2500" ];then
         ocean_fish=$(echo -e "\e[31mMackerel\e[0m")
         
-        elif [ "$FISH_WEIGHT" -lt "7500" ];then
+        elif [ "$FISH_WEIGHT" -le "7500" ];then
             ocean_fish=$(echo -e "\e[32mTuna\e[0m")
         
-        elif [ "$FISH_WEIGHT" -lt "12500" ];then
+        elif [ "$FISH_WEIGHT" -le "12500" ];then
             ocean_fish=$(echo -e "\e[33mFlounder\e[0m")
         
-        elif [ "$FISH_WEIGHT" -ge "15000" ];then
+        elif [ "$FISH_WEIGHT" -ge "12500" ];then
             if (( RANDOM % 2 )); 
             then 
                 ocean_fish=$(echo -e "\e[34mShark\e[0m");
@@ -652,11 +652,11 @@ bar=''
 
 while true;
 do
-stty -echo
 read -rs -N 1 -t 1 input
-    
+
     if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then 
         ((PROGRESS+=1))
+        input 1>& /dev/null
         sleep 0.05
         bar="${bar} "
         echo -ne "\r"
@@ -664,6 +664,7 @@ read -rs -N 1 -t 1 input
         echo -n "${PROGRESS}%"
     else
         ((PROGRESS-=1))
+        input 1>& /dev/null
         sleep 0.05
         bar="${bar} "
         echo -ne "\r"
@@ -676,12 +677,10 @@ read -rs -N 1 -t 1 input
         echo "What i'd catch ???"
         sleep 3s
         result
-        break;
     fi
     
     if [ $PROGRESS = -10 ];then
         skip_bite
-        break;
     fi
 done
 }
@@ -689,7 +688,6 @@ done
 #Notification Restart or Exit 
 quit_menu(){
 stty echo
-
 clear
 echo "You have a ${money}$
 "
