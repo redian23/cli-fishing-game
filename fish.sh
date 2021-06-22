@@ -9,7 +9,7 @@ stty -echo
 
 #Welcome
 clear
-echo -e $WELCOME
+echo -e $LOGO
 echo -e "\e[32mWelcome!\e[0m" 
 echo -e "You are start to play in Console Fishing"
 echo -e "This is simple bash script, but to have so much fun."
@@ -37,6 +37,20 @@ key_1=''
 key_2=''
 keyboard_key=''
 
+check_console_size(){
+    local console_height="$(stty size | cut -c 1-3)"
+    local console_width="$(stty size | cut -c 4-6)"
+
+    if [[ "$console_height" -lt "30" || "$console_width" -lt "150" ]];then
+        stty echo
+        echo -e ""
+        echo -e "\e[31mOpen console on fullscreen mode or resize terminal window!\e[0m"
+        echo -e "\e[33mMininal window size 150x30\e[0m"
+        sleep 3s
+        exit 0
+    fi
+}
+
 demo_mode_menu(){
 stty echo
 clear
@@ -54,13 +68,12 @@ echo -e "Select Game Mode:"
             ;;
         "Full Game")
             DEMO_MODE=FASLE
-            echo -e "Full game mode ON
-            "
+            echo -e "Full game mode ON"
             sleep 2s
             break
             ;;
         *) 
-            echo invalid option 
+            echo "invalid option $REPLY"
             ;;
         esac
     done
@@ -68,6 +81,7 @@ echo -e "Select Game Mode:"
 
 key_map_menu(){
 stty echo
+echo -e ""
 echo -e "Select key mapping:"
     select opt in "Key 'F'" "Key 'Space'"; 
     do
@@ -89,7 +103,7 @@ echo -e "Select key mapping:"
             break
             ;;
         *) 
-            echo invalid option 
+            echo "invalid option $REPLY"
             ;;
         esac
     done
@@ -400,7 +414,7 @@ gen_catch(){
 
 text_catcha(){
     echo -e ""
-    echo -e "CCCCAAAATTCCHAAAAA!!!!!!"
+    echo -e "\e[31mCCCCAAAATTCCHAAAAA!!!!!!\e[0m"
     sleep 1s
 }
 
@@ -470,19 +484,19 @@ do
 
     clear
         echo -e $BITE_ANIMATION_1
-        echo -e "\rTo catch fish press ${keyboard_key} ."   
+        echo -e "\rTo catch fish hold down the ${keyboard_key} ."   
     sleep 0.5s
     clear
         echo -e $BITE_ANIMATION_2
-        echo -e "\rTo catch fish press ${keyboard_key} .."
+        echo -e "\rTo catch fish hold down the ${keyboard_key} .."
     sleep 0.5s
     clear
         echo -e $BITE_ANIMATION_3
-        echo -e "\rTo catch fish press ${keyboard_key} ..."
+        echo -e "\rTo catch fish hold down the ${keyboard_key} ..."
     sleep 0.5s
     clear   
         echo -e $BITE_ANIMATION_2
-        echo -e "\rTo catch fish press ${keyboard_key} ...."
+        echo -e "\rTo catch fish hold down the ${keyboard_key} ...."
     sleep 0.5s
 
     if [ $bite_animation_time == 0 ]; then
@@ -648,16 +662,17 @@ do
             echo "Exit..."
             exit 0 
             ;;
-        *) echo invalid option 
+        *)
+            echo "invalid option $REPLY"
             ;;
     esac
 done
 sleep 5s
 }
 
-
+#REWRITE
 game(){
-    if [ $DEMO_MODE == 'TRUE' ];then
+    if [ $DEMO_MODE == 'TRUE' ];then 
         position_menu
         casting
         #waiting
@@ -679,6 +694,7 @@ settings_menu(){
     key_map_menu
 }
 
+check_console_size
 settings_menu
 fish_rog_menu
 
