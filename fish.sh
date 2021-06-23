@@ -14,9 +14,11 @@ echo -e "\e[32mWelcome!\e[0m"
 echo -e "You are start to play in Console Fishing"
 echo -e "This is simple bash script, but to have so much fun."
 echo -e "\e[33mCreated by Redian23\e[0m"
-echo -e "\e[31mVersion 0.5.3 beta\e[0m"
+echo -e "\e[31mVersion 0.6.1 RC1\e[0m"
 echo -e ""
+echo -e "Advices:"
 echo -e "\e[32mFor comfort play, please, open terminal on FullScreen\e[0m"
+echo -e "\e[35mPlease, use Eng Keyboard Layout\e[0m"
 sleep 10s
 
 #------------------------------------------------------------/
@@ -94,7 +96,8 @@ echo -e "Select key mapping:"
         "Key 'F'")
             keyboard_key='F'
             key_1="f"   #Eng
-            key_2="а"   #Rus
+            key_2=$'\320\260'
+            #key_2="а"   #Rus
             echo -e "You are select key F"
             sleep 3s
             break
@@ -480,6 +483,7 @@ while :
 do
     stty -echo
     read -rs -N 1 -t 1 input
+    stty erase "$key_1"
     ((bite_animation_time--))
 
     if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then 
@@ -653,10 +657,9 @@ bar=''
 while true;
 do
 read -rs -N 1 -t 1 input
-
-    if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then 
+    if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then
+        stty erase "$key_1"
         ((PROGRESS+=1))
-        input 1>& /dev/null
         sleep 0.05
         bar="${bar} "
         echo -ne "\r"
@@ -664,7 +667,6 @@ read -rs -N 1 -t 1 input
         echo -n "${PROGRESS}%"
     else
         ((PROGRESS-=1))
-        input 1>& /dev/null
         sleep 0.05
         bar="${bar} "
         echo -ne "\r"
@@ -688,6 +690,7 @@ done
 #Notification Restart or Exit 
 quit_menu(){
 stty echo
+
 clear
 echo "You have a ${money}$
 "
