@@ -614,7 +614,8 @@ get_coin(){
     coin=$(($FISH_WEIGHT/100))
     ((money+=$coin))
     echo "Fish saled! You a get ${coin}$"
-    sleep 1s 
+    sleep 1s
+    quit_menu
 }
 
 fish_sale(){
@@ -625,12 +626,12 @@ stty echo
         case $opt in
         "sale")
             get_coin
-            break
+            break 
             ;;
         "release")
             echo "Let to water..."
             sleep 3s
-            break
+            quit_menu
             ;;
         *) 
             echo "invalid option $REPLY"
@@ -658,7 +659,7 @@ while true;
 do
 read -rs -N 1 -t 1 input
     if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then
-        stty erase "$key_1"
+        stty erase "$input" 2> /dev/null
         ((PROGRESS+=1))
         sleep 0.05
         bar="${bar} "
@@ -667,6 +668,7 @@ read -rs -N 1 -t 1 input
         echo -n "${PROGRESS}%"
     else
         ((PROGRESS-=1))
+        stty erase "$input"
         sleep 0.05
         bar="${bar} "
         echo -ne "\r"
@@ -682,6 +684,7 @@ read -rs -N 1 -t 1 input
     fi
     
     if [ $PROGRESS = -10 ];then
+        echo ""
         skip_bite
     fi
 done
