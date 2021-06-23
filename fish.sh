@@ -96,8 +96,7 @@ echo -e "Select key mapping:"
         "Key 'F'")
             keyboard_key='F'
             key_1="f"   #Eng
-            key_2=$'\320\260'
-            #key_2="а"   #Rus
+            key_2="а"   #Rus
             echo -e "You are select key F"
             sleep 3s
             break
@@ -659,7 +658,7 @@ while true;
 do
 read -rs -N 1 -t 1 input
     if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then
-        stty erase "$input" 2> /dev/null
+        stty erase "$key_1" 2> /dev/null
         ((PROGRESS+=1))
         sleep 0.05
         bar="${bar} "
@@ -668,7 +667,7 @@ read -rs -N 1 -t 1 input
         echo -n "${PROGRESS}%"
     else
         ((PROGRESS-=1))
-        stty erase "$input"
+        stty erase "$key_1"
         sleep 0.05
         bar="${bar} "
         echo -ne "\r"
