@@ -19,17 +19,17 @@ echo -e ""
 echo -e "Advices:"
 echo -e "\e[32mFor comfort play, please, open terminal on FullScreen\e[0m"
 echo -e "\e[35mPlease, use Eng Keyboard Layout\e[0m"
-sleep 10s
+sleep 5s
 
 #------------------------------------------------------------/
-
 #VALUES
+
 #initialize randome borders
 FLOOR=10
 RANGE=100
+DEMO_MODE=FASLE
 
 #initialize envirement values
-money=350
 position_index=''
 FISH_ROD_MAX_WEIGHT=0
 FISH_WEIGHT=0
@@ -62,19 +62,18 @@ stty echo
 clear
 echo -e "\e[33mSettings :\e[0m
 "
-echo -e "Select Game Mode:"
-    select opt in "Demo" "Full Game"; 
+echo -e "Start Demo Mode:"
+    select opt in "Yes" "No"; 
     do
         case $opt in
-        "Demo")
+        "Yes")
             DEMO_MODE=TRUE
-            echo -e "Demo mode ON"
+            echo -e "Start Demo"
             sleep 2s
             break
             ;;
-        "Full Game")
-            DEMO_MODE=FASLE
-            echo -e "Full game mode ON"
+        "No")
+            echo -e "Start Full Game"
             sleep 2s
             break
             ;;
@@ -97,7 +96,7 @@ echo -e "Select key mapping:"
             keyboard_key='F'
             key_1="f"   #Eng
             key_2="а"   #Rus
-            echo -e "You are select key F"
+            echo -e "You are select ${opt}"
             sleep 3s
             break
             ;;
@@ -105,7 +104,46 @@ echo -e "Select key mapping:"
             keyboard_key='Space'
             key_1=$'\x20'   #Space
             key_2=$'\x0a'   #Enter
-            echo "You are select key Space"
+            echo -e "You are select ${opt}"
+            sleep 3s
+            break
+            ;;
+        *) 
+            echo "invalid option $REPLY"
+            ;;
+        esac
+    done
+}
+
+
+difficulty_level_menu(){
+echo -e ""
+echo -e "Select difficulty level:"
+    select opt in "Easy" "Medium" "Hard" "Expert"; 
+    do
+        case $opt in
+        "Easy")
+            money=350
+            echo -e "You are select ${opt}"
+            sleep 3s
+            break
+            ;;
+        "Medium")
+            money=200
+            echo -e "You are select ${opt}"
+            sleep 3s
+            break
+            ;;
+        "Hard")
+            money=50
+            echo -e "You are select ${opt}"
+            sleep 3s
+            break
+            ;;
+
+        "Expert")
+            money=1
+            echo -e "You are select ${opt}"
             sleep 3s
             break
             ;;
@@ -124,21 +162,28 @@ echo -e "\e[33mYou are have a ${money}$\e[0m"
 echo "
 List fish-rod's:
 *  Name:                        Price:  Max Weith:
-1. Fish Liter N5;               100$;   5kg; 
-2. Fish Hunter Pro M10RT;       250$;   10kg; 
-3. Fish Kung Fu Master R20V;    450$;   20kg; 
+1. Stick with thread            0$      1kg;
+2. Fish Liter N5;               100$;   5kg; 
+3. Fish Hunter Pro M10RT;       250$;   10kg; 
+4. Fish Kung Fu Master R20V;    450$;   20kg; 
 
 Selecte Fish-rod:"
 
-fish_rods_list=("Fish Liter N5" "Fish Hunter Pro M10RT" "Fish Kung Fu Master R20V")
+fish_rods_list=("Stick" "Fish Liter N5" "Fish Hunter Pro M10RT" "Fish Kung Fu Master R20V")
 select opt in "${fish_rods_list[@]}"
 do
     case $opt in
+        "Stick")  
+            FISH_ROD_MAX_WEIGHT=1000
+            echo "You are find ownerless stick with thread"
+            sleep 1s
+            break
+            ;;
         "Fish Liter N5")
             if [ "$money" -lt "100" ];then
                 echo "You don't have a money. Sorry :("
                 sleep 3s
-                exit 0
+                fish_rod_menu
             fi
             ((money-=100))       
             FISH_ROD_MAX_WEIGHT=5000
@@ -189,7 +234,7 @@ select opt in "${positions[@]}"
 do
     case $opt in
         "Place 1")
-            RANGE=6500
+            RANGE=4500
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_LAKE_POSITION1_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_LAKE_POSITION1_2
@@ -203,7 +248,7 @@ do
             break
             ;;
         "Place 2")
-            RANGE=7500
+            RANGE=5500
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_LAKE_POSITION2_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_LAKE_POSITION2_2
@@ -217,7 +262,7 @@ do
             break
             ;;
         "Place 3")
-            RANGE=8500
+            RANGE=6500
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_LAKE_POSITION3_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_LAKE_POSITION3_2
@@ -244,7 +289,7 @@ select opt in "${positions[@]}"
 do
     case $opt in
         "Place 1")
-            RANGE=7500
+            RANGE=8000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_RIVER_POSITION1_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_RIVER_POSITION1_2
@@ -258,7 +303,7 @@ do
             break
             ;;
         "Place 2")
-            RANGE=9000
+            RANGE=10000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_RIVER_POSITION2_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_RIVER_POSITION2_2
@@ -272,7 +317,7 @@ do
             break
             ;;
         "Place 3")
-            RANGE=11000
+            RANGE=12000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_RIVER_POSITION3_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_RIVER_POSITION3_2
@@ -594,9 +639,6 @@ ocean_fish_selector(){
 }
 
 fish_info(){
-#lake_fish_list=$(shuf -n1 -e "\e[31mCarpe\e[0m" "\e[32mRuff\e[0m" "\e[33mRoach\e[0m" "\e[34mPike\e[0m")
-#ocean_fish_list=$(shuf -n1 -e "\e[31mMackerel\e[0m" "\e[32mTuna\e[0m" "\e[33mFlounder\e[0m" "\e[34mHalibut\e[0m" "\e[34mShark\e[0m")
-    
 clear
     echo "We are caught! :)"
         if [ $position_index == "ocean_positions" ]; then
@@ -620,14 +662,14 @@ get_coin(){
 fish_sale(){
 stty echo
     echo 'Sale fish or release fish"'
-    select opt in sale release ; 
+    select opt in Sale Release ; 
     do
         case $opt in
-        "sale")
+        "Sale")
             get_coin
             break 
             ;;
-        "release")
+        "Release")
             echo "Let to water..."
             sleep 3s
             quit_menu
@@ -742,6 +784,7 @@ game(){
 
 settings_menu(){
     demo_mode_menu
+    difficulty_level_menu
     key_map_menu
 }
 
