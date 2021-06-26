@@ -711,9 +711,9 @@ read -rs -N 1 -t 1 input
         ((PROGRESS-=1))
         stty erase "$key_1"
         sleep 0.05
-        bar="${bar} "
+        bar="${bar}"
         echo -ne "\r"
-        echo -ne "\e[41m$bar\e[0m"
+        echo -ne "\e[41m${bar}\e[0m"
         echo -n "${PROGRESS}%"
     fi
 
