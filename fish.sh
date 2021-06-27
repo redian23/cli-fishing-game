@@ -14,11 +14,12 @@ echo -e "\e[32mWelcome!\e[0m"
 echo -e "You are start to play in Console Fishing"
 echo -e "This is simple bash script, but to have so much fun."
 echo -e "\e[33mCreated by Redian23\e[0m"
-echo -e "\e[31mVersion 0.6.1 RC1\e[0m"
+echo -e "\e[31mVersion 0.6.3 RC1\e[0m"
 echo -e ""
 echo -e "Advices:"
-echo -e "\e[32mFor comfort play, please, open terminal on FullScreen\e[0m"
-echo -e "\e[35mPlease, use Eng Keyboard Layout\e[0m"
+echo -e "\e[32m * For comfort play, please, open terminal on FullScreen\e[0m"
+echo -e "\e[35m * Please, use Eng Keyboard Layout\e[0m"
+echo -e "\e[33m * Looks like better on KDE (kde console)\e[0m"
 sleep 5s
 
 #------------------------------------------------------------/
@@ -27,14 +28,17 @@ sleep 5s
 #initialize randome borders
 FLOOR=10
 RANGE=100
+
+FISH_WEIGHT=0
+FISH_WEIGHT_RANGE=100
+
 DEMO_MODE=FASLE
 
 #initialize envirement values
-position_index=''
 FISH_ROD_MAX_WEIGHT=0
-FISH_WEIGHT=0
 CATCH=0
 ENV=0
+position_index=''
 
 #Button on board
 key_1=''
@@ -234,7 +238,7 @@ select opt in "${positions[@]}"
 do
     case $opt in
         "Place 1")
-            RANGE=4500
+            FISH_WEIGHT_RANGE=4500
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_LAKE_POSITION1_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_LAKE_POSITION1_2
@@ -248,7 +252,7 @@ do
             break
             ;;
         "Place 2")
-            RANGE=5500
+            FISH_WEIGHT_RANGE=5500
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_LAKE_POSITION2_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_LAKE_POSITION2_2
@@ -262,7 +266,7 @@ do
             break
             ;;
         "Place 3")
-            RANGE=6500
+            FISH_WEIGHT_RANGE=6500
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_LAKE_POSITION3_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_LAKE_POSITION3_2
@@ -289,7 +293,7 @@ select opt in "${positions[@]}"
 do
     case $opt in
         "Place 1")
-            RANGE=8000
+            FISH_WEIGHT_RANGE=8000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_RIVER_POSITION1_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_RIVER_POSITION1_2
@@ -303,7 +307,7 @@ do
             break
             ;;
         "Place 2")
-            RANGE=10000
+            FISH_WEIGHT_RANGE=10000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_RIVER_POSITION2_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_RIVER_POSITION2_2
@@ -317,7 +321,7 @@ do
             break
             ;;
         "Place 3")
-            RANGE=12000
+            FISH_WEIGHT_RANGE=12000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_RIVER_POSITION3_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_RIVER_POSITION3_2
@@ -344,7 +348,7 @@ select opt in "${positions[@]}"
 do
     case $opt in
         "Place 1")
-            RANGE=15000
+            FISH_WEIGHT_RANGE=15000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_OCEAN_POSITION1_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_OCEAN_POSITION1_2
@@ -358,7 +362,7 @@ do
             break
             ;;
         "Place 2")
-            RANGE=20000
+            FISH_WEIGHT_RANGE=20000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_OCEAN_POSITION2_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_OCEAN_POSITION2_2
@@ -372,7 +376,7 @@ do
             break
             ;;
         "Place 3")
-            RANGE=25000
+            FISH_WEIGHT_RANGE=25000
 
             WAITING_ANIMATION_1=$WAITING_ANIMATION_OCEAN_POSITION3_1
             WAITING_ANIMATION_2=$WAITING_ANIMATION_OCEAN_POSITION3_2
@@ -454,13 +458,23 @@ casting(){
 # START Animation 
 
 gen_env(){
-    ENV=$RANDOM
-    let "ENV %= $RANGE" 
+    ENV=0
+
+    while [ "$ENV" -le $FLOOR ]
+    do
+        ENV=$RANDOM
+        let "ENV %= $RANGE" 
+    done
 }
 
 gen_catch(){
-    CATCH=$RANDOM
-    let "CATCH %= $RANGE"  
+    CATCH=0
+
+    while [ "$CATCH" -le $FLOOR ]
+    do
+        CATCH=$RANDOM
+        let "CATCH %= $RANGE"  
+    done
 }
 
 text_catcha(){
@@ -479,7 +493,7 @@ gen_env
             text_catcha
             break;
         else
-            #echo $CATCH!=$ENV #DEBUG TAKT INFO
+            echo $CATCH!=$ENV #DEBUG TAKT INFO
             echo -e  $WAITING_ANIMATION_1
             sleep 0.75s
         fi
@@ -490,7 +504,7 @@ gen_env
             text_catcha
             break;
         else
-            #echo $CATCH!=$ENV #DEBUG TAKT INFO
+            echo $CATCH!=$ENV #DEBUG TAKT INFO
             echo -e $WAITING_ANIMATION_2
             sleep 0.75s
         fi
@@ -501,7 +515,7 @@ gen_env
             text_catcha
             break;
         else
-            #echo $CATCH!=$ENV #DEBUG TAKT INFO
+            echo $CATCH!=$ENV #DEBUG TAKT INFO
             echo -e $WAITING_ANIMATION_3
             sleep 0.75s
         fi
@@ -512,7 +526,7 @@ gen_env
             text_catcha
             break;
         else
-            #echo $CATCH!=$ENV #DEBUG TAKT INFO
+            echo $CATCH!=$ENV #DEBUG TAKT INFO
             echo -e $WAITING_ANIMATION_2
             sleep 0.75s
         fi
@@ -583,7 +597,7 @@ fish_rod_broken(){
 
 gen_fish_weight(){
     FISH_WEIGHT=$RANDOM
-    let "FISH_WEIGHT %= $RANGE"
+    let "FISH_WEIGHT %= $FISH_WEIGHT_RANGE"
 }
 
 caught(){
