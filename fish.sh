@@ -14,11 +14,11 @@ echo -e "\e[32mWelcome!\e[0m"
 echo -e "You are start to play in Console Fishing"
 echo -e "This is simple bash script, but to have so much fun."
 echo -e "\e[33mCreated by Redian23\e[0m"
-echo -e "\e[31mVersion 0.6.3 RC1\e[0m"
+echo -e "\e[31mVersion 0.6.7 RC1\e[0m"
 echo -e ""
 echo -e "Advices:"
 echo -e "\e[32m * For comfort play, please, open terminal on FullScreen\e[0m"
-echo -e "\e[35m * Please, use Eng Keyboard Layout\e[0m"
+echo -e "\e[35m * Please, use <Eng> Keyboard Layout\e[0m"
 echo -e "\e[33m * Looks like better on KDE (kde console)\e[0m"
 sleep 5s
 
@@ -471,8 +471,10 @@ text_catcha(){
     sleep 1s
 }
 
-waiting_logic(){
-          
+waiting(){
+gen_env
+    while :
+    do
         clear
         gen_catch
         if [ $CATCH == $ENV ]; then 
@@ -516,14 +518,11 @@ waiting_logic(){
             echo -e $WAITING_ANIMATION_2
             sleep 0.75s
         fi
-}
 
-waiting_process(){
-gen_env
-     while :
-     do
-        waiting_logic
-     done
+        if [ $DEMO_MODE == "TRUE" ];then
+            break;
+        fi
+    done
 }
 
 # Animation PocKlewKI BLEAT
@@ -769,28 +768,21 @@ do
             ;;
     esac
 done
-sleep 5s
 }
 
+#Default settings to consloe when Emergency 
 retVal=$?
 if [ $retVal -ne 0 ]; then
+    stty echo
     stty erase ^?
 fi
 
 game(){
-    if [ $DEMO_MODE == 'TRUE' ];then 
-        position_menu
-        casting
-        waiting_logic
-        bite_process
-        playing_fish
-    else
-        position_menu
-        casting
-        waiting_process
-        bite_process
-        playing_fish
-    fi
+    position_menu
+    casting
+    waiting
+    bite_process
+    playing_fish
 }
 
 settings_menu(){
