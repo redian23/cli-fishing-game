@@ -14,7 +14,7 @@ echo -e "\e[32mWelcome!\e[0m"
 echo -e "You are start to play in Console Fishing"
 echo -e "This is simple bash script, but to have so much fun."
 echo -e "\e[33mCreated by Redian23\e[0m"
-echo -e "\e[31mVersion 0.6.11 RC2\e[0m"
+echo -e "\e[31mVersion 0.7.1 RC2\e[0m"
 echo -e ""
 echo -e "Advices:"
 echo -e "\e[32m * For comfort play, please, open terminal on FullScreen\e[0m"
@@ -527,7 +527,7 @@ while :
 do
     stty -echo
     read -rs -N 1 -t 1 input
-    stty erase "$key_1"
+    stty erase "${key_1}"
     ((bite_animation_time--))
 
     if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then 
@@ -601,24 +601,24 @@ gen_fish_weight
 lake_fish_selector(){
     if [ "$FISH_WEIGHT" -le "1000" ];then
         lake_fish=$(echo -e "\e[33mRoach\e[0m")
-        fish_value=0.05
+        fish_value=105
 
         elif [ "$FISH_WEIGHT" -le "2000" ];then
             lake_fish=$(echo -e "\e[32mRuff\e[0m")
-            fish_value=0.06
+            fish_value=106
 
         elif [ "$FISH_WEIGHT" -lt "3500" ];then
             lake_fish=$(echo -e "\e[35mBream\e[0m")
-            fish_value=0.08
+            fish_value=108
 
         elif [ "$FISH_WEIGHT" -ge "3500" ];then
             if (( RANDOM % 2 )); 
             then 
                 lake_fish=$(echo -e "\e[31mCarpe\e[0m");
-                fish_value=0.09
+                fish_value=109
             else 
                 lake_fish=$(echo -e "\e[34mPike\e[0m");
-                fish_value=0.1
+                fish_value=110
             fi
     fi
 }
@@ -626,24 +626,24 @@ lake_fish_selector(){
 ocean_fish_selector(){
     if [ "$FISH_WEIGHT" -le "2500" ];then
         ocean_fish=$(echo -e "\e[31mMackerel\e[0m")
-        fish_value=0.08
+        fish_value=108
 
         elif [ "$FISH_WEIGHT" -le "7500" ];then
             ocean_fish=$(echo -e "\e[32mTuna\e[0m")
-            fish_value=0.09
+            fish_value=109
 
         elif [ "$FISH_WEIGHT" -lt "12500" ];then
             ocean_fish=$(echo -e "\e[33mFlounder\e[0m")
-            fish_value=0.1
+            fish_value=110
 
         elif [ "$FISH_WEIGHT" -ge "12500" ];then
             if (( RANDOM % 2 )); 
             then 
                 ocean_fish=$(echo -e "\e[34mHalibut\e[0m");
-                fish_value=0.15
+                fish_value=115
             else 
                 ocean_fish=$(echo -e "\e[34mShark\e[0m");
-                fish_value=0.2
+                fish_value=120
             fi
     fi
 }
@@ -668,11 +668,8 @@ stty echo
     do
         case $opt in
         "Sale")
-            sleep 5s
-            coin=$(($FISH_WEIGHT*$fish_value))
-            sleep 5s
+            coin=$(($FISH_WEIGHT/$fish_value))
             ((money+=${coin}))
-            sleep 5s
             echo "Fish saled! You a get ${coin}$"
             sleep 1s
             quit_menu
@@ -690,11 +687,20 @@ stty echo
 }
 
 result(){
+    local looze=0
+    
+    if [ ${looze} == "4" ];then
+        caught
+        fish_sale;   
+    fi
+    
     if (( RANDOM % 2 )); 
         then 
+            looze=0
             caught
             fish_sale; 
         else 
+            ((looze+=1))
             got_off;
     fi
 }
@@ -728,12 +734,14 @@ read -rs -N 1 -t 1 input
     if [ $PROGRESS = 100 ];then
         echo ""
         echo "What i'd catch ???"
+        stty erase ^?
         sleep 3s
         result
     fi
     
     if [ $PROGRESS = -10 ];then
         echo ""
+        stty erase ^?
         skip_bite
     fi
 done
@@ -773,7 +781,7 @@ done
 
 #Default settings to console when Emergency 
 status=$?
-if [ $status -ne 0 || $status -ne 1 ]; then
+if [[ $status -ne 0 || $status -ne 1 ]]; then
     stty echo
     stty erase ^?
 fi
