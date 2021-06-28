@@ -14,7 +14,7 @@ echo -e "\e[32mWelcome!\e[0m"
 echo -e "You are start to play in Console Fishing"
 echo -e "This is simple bash script, but to have so much fun."
 echo -e "\e[33mCreated by Redian23\e[0m"
-echo -e "\e[31mVersion 0.6.7 RC1\e[0m"
+echo -e "\e[31mVersion 0.6.11 RC2\e[0m"
 echo -e ""
 echo -e "Advices:"
 echo -e "\e[32m * For comfort play, please, open terminal on FullScreen\e[0m"
@@ -34,16 +34,19 @@ FISH_WEIGHT_RANGE=100
 
 DEMO_MODE=FALSE
 DEBUG_MODE=FALSE
+
 #initialize envirement values
+POSITION_INDICATOR=''
 FISH_ROD_MAX_WEIGHT=0
 CATCH=0
 ENV=0
-position_index=''
+
 
 #Button on board
 key_1=''
 key_2=''
 keyboard_key=''
+
 
 #------------------------------------------------------------/
 
@@ -395,7 +398,7 @@ select opt in "${positions[@]}"
 do
     case $opt in
         "Small lake")
-            position_index='lake_positions'
+            POSITION_INDICATOR='lake_positions'
             
             echo -e "you chose Lake \n"
             sleep 0.5s
@@ -403,7 +406,7 @@ do
             break
             ;;
         "River")
-            position_index='river_positions'
+            POSITION_INDICATOR='river_positions'
             
             echo -e "you chose river \n"
             sleep 0.5s
@@ -411,7 +414,7 @@ do
             break
             ;;
         "Ocean")
-            position_index='ocean_positions'
+            POSITION_INDICATOR='ocean_positions'
             
             echo -e "you chose ocean \n"
             sleep 0.5s
@@ -607,19 +610,24 @@ gen_fish_weight
 lake_fish_selector(){
     if [ "$FISH_WEIGHT" -le "1000" ];then
         lake_fish=$(echo -e "\e[33mRoach\e[0m")
+        fish_value=0.05
 
         elif [ "$FISH_WEIGHT" -le "2000" ];then
             lake_fish=$(echo -e "\e[32mRuff\e[0m")
+            fish_value=0.06
 
-        elif [ "$FISH_WEIGHT" -le "3500" ];then
+        elif [ "$FISH_WEIGHT" -lt "3500" ];then
             lake_fish=$(echo -e "\e[35mBream\e[0m")
+            fish_value=0.08
 
         elif [ "$FISH_WEIGHT" -ge "3500" ];then
             if (( RANDOM % 2 )); 
             then 
                 lake_fish=$(echo -e "\e[31mCarpe\e[0m");
+                fish_value=0.09
             else 
                 lake_fish=$(echo -e "\e[34mPike\e[0m");
+                fish_value=0.1
             fi
     fi
 }
@@ -627,19 +635,24 @@ lake_fish_selector(){
 ocean_fish_selector(){
     if [ "$FISH_WEIGHT" -le "2500" ];then
         ocean_fish=$(echo -e "\e[31mMackerel\e[0m")
-        
+        fish_value=0.08
+
         elif [ "$FISH_WEIGHT" -le "7500" ];then
             ocean_fish=$(echo -e "\e[32mTuna\e[0m")
-        
-        elif [ "$FISH_WEIGHT" -le "12500" ];then
+            fish_value=0.09
+
+        elif [ "$FISH_WEIGHT" -lt "12500" ];then
             ocean_fish=$(echo -e "\e[33mFlounder\e[0m")
-        
+            fish_value=0.1
+
         elif [ "$FISH_WEIGHT" -ge "12500" ];then
             if (( RANDOM % 2 )); 
             then 
-                ocean_fish=$(echo -e "\e[34mShark\e[0m");
-            else 
                 ocean_fish=$(echo -e "\e[34mHalibut\e[0m");
+                fish_value=0.15
+            else 
+                ocean_fish=$(echo -e "\e[34mShark\e[0m");
+                fish_value=0.2
             fi
     fi
 }
@@ -647,7 +660,7 @@ ocean_fish_selector(){
 fish_info(){
 clear
     echo "We are caught! :)"
-        if [ $position_index == "ocean_positions" ]; then
+        if [ $POSITION_INDICATOR == "ocean_positions" ]; then
             ocean_fish_selector
             echo -e $ocean_fish
         else
@@ -657,14 +670,6 @@ clear
     echo "WEIGHT: $FISH_WEIGHT g."
 }
 
-get_coin(){
-    coin=$(($FISH_WEIGHT/100))
-    ((money+=$coin))
-    echo "Fish saled! You a get ${coin}$"
-    sleep 1s
-    quit_menu
-}
-
 fish_sale(){
 stty echo
     echo 'Sale fish or release fish"'
@@ -672,8 +677,11 @@ stty echo
     do
         case $opt in
         "Sale")
-            get_coin
-            break 
+            coin=$((${FISH_WEIGHT}/${fish_value}))
+            ((money+=${coin}))
+            echo "Fish saled! You a get ${coin}$"
+            sleep 1s
+            quit_menu
             ;;
         "Release")
             echo "Let to water..."
@@ -770,9 +778,9 @@ do
 done
 }
 
-#Default settings to consloe when Emergency 
-retVal=$?
-if [ $retVal -ne 0 ]; then
+#Default settings to console when Emergency 
+status=$?
+if [ $status -ne 0 || $status -ne 1 ]; then
     stty echo
     stty erase ^?
 fi
