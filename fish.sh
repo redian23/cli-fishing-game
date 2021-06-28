@@ -41,7 +41,6 @@ FISH_ROD_MAX_WEIGHT=0
 CATCH=0
 ENV=0
 
-
 #Button on board
 key_1=''
 key_2=''
@@ -218,10 +217,6 @@ do
 done
 game
 }
-
-#START GAME 
-
-# Select one of many position of bobber
 
 lake_positions(){
 echo "Please enter position your bobber:"
@@ -446,8 +441,6 @@ casting(){
     sleep 0.5s  
 }
 
-# START Animation 
-
 gen_env(){
     ENV=0
 
@@ -527,8 +520,6 @@ gen_env
         fi
     done
 }
-
-# Animation PocKlewKI BLEAT
 
 bite_process(){    
 bite_animation_time=5
@@ -748,7 +739,6 @@ read -rs -N 1 -t 1 input
 done
 }
 
-#Notification Restart or Exit 
 quit_menu(){
 stty echo
 
