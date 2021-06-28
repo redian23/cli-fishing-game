@@ -46,7 +46,7 @@ ENV=0
 key_1=''
 key_2=''
 keyboard_key=''
-
+fish_value=0
 
 #------------------------------------------------------------/
 
@@ -677,8 +677,11 @@ stty echo
     do
         case $opt in
         "Sale")
-            coin=$((${FISH_WEIGHT}/${fish_value}))
+            sleep 5s
+            coin=$(($FISH_WEIGHT*$fish_value))
+            sleep 5s
             ((money+=${coin}))
+            sleep 5s
             echo "Fish saled! You a get ${coin}$"
             sleep 1s
             quit_menu
