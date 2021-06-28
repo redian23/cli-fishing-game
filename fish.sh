@@ -64,6 +64,7 @@ fi
 debug_echo(){
     if [ $DEBUG_MODE == 'TRUE' ];then 
         echo -e $CATCH!=$ENV
+        echo -e "Loozes-> "${looze}
     fi
 }
 
@@ -601,24 +602,25 @@ gen_fish_weight
 lake_fish_selector(){
     if [ "$FISH_WEIGHT" -le "1000" ];then
         lake_fish=$(echo -e "\e[33mRoach\e[0m")
-        fish_value=105
+        fish_value=5
+        
 
         elif [ "$FISH_WEIGHT" -le "2000" ];then
             lake_fish=$(echo -e "\e[32mRuff\e[0m")
-            fish_value=106
+            fish_value=6
 
         elif [ "$FISH_WEIGHT" -lt "3500" ];then
             lake_fish=$(echo -e "\e[35mBream\e[0m")
-            fish_value=108
+            fish_value=8
 
         elif [ "$FISH_WEIGHT" -ge "3500" ];then
             if (( RANDOM % 2 )); 
             then 
                 lake_fish=$(echo -e "\e[31mCarpe\e[0m");
-                fish_value=109
+                fish_value=9
             else 
                 lake_fish=$(echo -e "\e[34mPike\e[0m");
-                fish_value=110
+                fish_value=10
             fi
     fi
 }
@@ -626,24 +628,24 @@ lake_fish_selector(){
 ocean_fish_selector(){
     if [ "$FISH_WEIGHT" -le "2500" ];then
         ocean_fish=$(echo -e "\e[31mMackerel\e[0m")
-        fish_value=108
+        fish_value=8
 
         elif [ "$FISH_WEIGHT" -le "7500" ];then
             ocean_fish=$(echo -e "\e[32mTuna\e[0m")
-            fish_value=109
+            fish_value=9
 
         elif [ "$FISH_WEIGHT" -lt "12500" ];then
             ocean_fish=$(echo -e "\e[33mFlounder\e[0m")
-            fish_value=110
+            fish_value=10
 
         elif [ "$FISH_WEIGHT" -ge "12500" ];then
             if (( RANDOM % 2 )); 
             then 
                 ocean_fish=$(echo -e "\e[34mHalibut\e[0m");
-                fish_value=115
+                fish_value=15
             else 
                 ocean_fish=$(echo -e "\e[34mShark\e[0m");
-                fish_value=120
+                fish_value=20
             fi
     fi
 }
@@ -654,9 +656,11 @@ clear
         if [ $POSITION_INDICATOR == "ocean_positions" ]; then
             ocean_fish_selector
             echo -e $ocean_fish
+            echo -e "${ocean_fish} sale ${fish_value}% by weight"
         else
             lake_fish_selector
             echo -e $lake_fish
+            echo -e "${lake_fish} sale ${fish_value}% by weight"
         fi
     echo "WEIGHT: $FISH_WEIGHT g."
 }
@@ -668,7 +672,7 @@ stty echo
     do
         case $opt in
         "Sale")
-            coin=$(($FISH_WEIGHT/$fish_value))
+            coin=$(($FISH_WEIGHT/100*$fish_value))
             ((money+=${coin}))
             echo "Fish saled! You a get ${coin}$"
             sleep 1s
@@ -686,22 +690,22 @@ stty echo
     done
 }
 
+looze=0
 result(){
-    local looze=0
-    
-    if [ ${looze} == "4" ];then
-        caught
-        fish_sale;   
-    fi
     
     if (( RANDOM % 2 )); 
         then 
             looze=0
             caught
             fish_sale; 
-        else 
-            ((looze+=1))
-            got_off;
+        else
+        ((looze++))
+        debug_echo
+            if [ ${looze} == "4" ];then
+                caught
+                fish_sale;   
+            fi 
+        got_off;
     fi
 }
 
@@ -734,14 +738,12 @@ read -rs -N 1 -t 1 input
     if [ $PROGRESS = 100 ];then
         echo ""
         echo "What i'd catch ???"
-        stty erase ^?
         sleep 3s
         result
     fi
     
     if [ $PROGRESS = -10 ];then
         echo ""
-        stty erase ^?
         skip_bite
     fi
 done
@@ -782,6 +784,7 @@ done
 #Default settings to console when Emergency 
 status=$?
 if [[ $status -ne 0 || $status -ne 1 ]]; then
+    echo Emergency
     stty echo
     stty erase ^?
 fi
