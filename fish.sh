@@ -32,8 +32,8 @@ RANGE=100
 FISH_WEIGHT=0
 FISH_WEIGHT_RANGE=100
 
-DEMO_MODE=FASLE
-
+DEMO_MODE=FALSE
+DEBUG_MODE=FALSE
 #initialize envirement values
 FISH_ROD_MAX_WEIGHT=0
 CATCH=0
@@ -46,6 +46,24 @@ key_2=''
 keyboard_key=''
 
 #------------------------------------------------------------/
+
+if [[ "$1" == -d || "$1" == --debug || "$2" == -d || "$2" == --debug ]]; then
+    DEBUG_MODE=TRUE
+    echo -e "Debug Mode ON"
+    sleep 2s
+fi
+
+if [[ "$1" == -dm || "$1" == --demo || "$2" == -dm || "$2" == --demo ]]; then
+    DEMO_MODE=TRUE
+    echo -e "Demo Mode ON"
+    sleep 2s
+fi
+
+debug_echo(){
+    if [ $DEBUG_MODE == 'TRUE' ];then 
+        echo -e $CATCH!=$ENV
+    fi
+}
 
 check_console_size(){
     local console_height="$(stty size | cut -c 1-3)"
@@ -61,37 +79,8 @@ check_console_size(){
     fi
 }
 
-demo_mode_menu(){
-stty echo
-clear
-echo -e "\e[33mSettings :\e[0m
-"
-echo -e "Start Demo Mode:"
-    select opt in "Yes" "No"; 
-    do
-        case $opt in
-        "Yes")
-            DEMO_MODE=TRUE
-            echo -e "Start Demo"
-            sleep 2s
-            break
-            ;;
-        "No")
-            echo -e "Start Full Game"
-            sleep 2s
-            break
-            ;;
-        *) 
-            echo "invalid option $REPLY"
-            ;;
-        esac
-    done
-}
-
 key_map_menu(){
 stty echo
-
-echo -e ""
 echo -e "Select key mapping:"
     select opt in "Key 'F'" "Key 'Space'"; 
     do
@@ -101,7 +90,7 @@ echo -e "Select key mapping:"
             key_1="f"   #Eng
             key_2="а"   #Rus
             echo -e "You are select ${opt}"
-            sleep 3s
+            sleep 1s
             break
             ;;
         "Key 'Space'")
@@ -109,7 +98,7 @@ echo -e "Select key mapping:"
             key_1=$'\x20'   #Space
             key_2=$'\x0a'   #Enter
             echo -e "You are select ${opt}"
-            sleep 3s
+            sleep 1s
             break
             ;;
         *) 
@@ -129,26 +118,26 @@ echo -e "Select difficulty level:"
         "Easy")
             money=350
             echo -e "You are select ${opt}"
-            sleep 3s
+            sleep 1s
             break
             ;;
         "Medium")
             money=200
             echo -e "You are select ${opt}"
-            sleep 3s
+            sleep 1s
             break
             ;;
         "Hard")
             money=50
             echo -e "You are select ${opt}"
-            sleep 3s
+            sleep 1s
             break
             ;;
 
         "Expert")
             money=1
             echo -e "You are select ${opt}"
-            sleep 3s
+            sleep 1s
             break
             ;;
         *) 
@@ -301,7 +290,6 @@ do
             BITE_ANIMATION_1=$BITE_ANIMATION_RIVER_POSITION1_1
             BITE_ANIMATION_2=$BITE_ANIMATION_RIVER_POSITION1_2
             BITE_ANIMATION_3=$BITE_ANIMATION_RIVER_POSITION1_3
-            
             echo "you chose position 1"
             sleep 0.5s
             break
@@ -483,17 +471,15 @@ text_catcha(){
     sleep 1s
 }
 
-waiting(){
-gen_env
-     while :
-     do
+waiting_logic(){
+          
         clear
         gen_catch
         if [ $CATCH == $ENV ]; then 
             text_catcha
             break;
         else
-            echo $CATCH!=$ENV #DEBUG TAKT INFO
+            debug_echo
             echo -e  $WAITING_ANIMATION_1
             sleep 0.75s
         fi
@@ -504,7 +490,7 @@ gen_env
             text_catcha
             break;
         else
-            echo $CATCH!=$ENV #DEBUG TAKT INFO
+            debug_echo
             echo -e $WAITING_ANIMATION_2
             sleep 0.75s
         fi
@@ -515,7 +501,7 @@ gen_env
             text_catcha
             break;
         else
-            echo $CATCH!=$ENV #DEBUG TAKT INFO
+            debug_echo
             echo -e $WAITING_ANIMATION_3
             sleep 0.75s
         fi
@@ -526,10 +512,17 @@ gen_env
             text_catcha
             break;
         else
-            echo $CATCH!=$ENV #DEBUG TAKT INFO
+            debug_echo
             echo -e $WAITING_ANIMATION_2
             sleep 0.75s
         fi
+}
+
+waiting_process(){
+gen_env
+     while :
+     do
+        waiting_logic
      done
 }
 
@@ -779,27 +772,33 @@ done
 sleep 5s
 }
 
-#REWRITE
+retVal=$?
+if [ $retVal -ne 0 ]; then
+    stty erase ^?
+fi
+
 game(){
     if [ $DEMO_MODE == 'TRUE' ];then 
         position_menu
         casting
-        #waiting
+        waiting_logic
         bite_process
         playing_fish
     else
         position_menu
         casting
-        waiting
+        waiting_process
         bite_process
         playing_fish
     fi
 }
 
 settings_menu(){
-    demo_mode_menu
-    difficulty_level_menu
+    clear    
+    echo -e "\e[33mSettings :\e[0m"
+    echo -e ""
     key_map_menu
+    difficulty_level_menu
 }
 
 check_console_size
