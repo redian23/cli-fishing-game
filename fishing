@@ -1,5 +1,5 @@
 #!/bin/bash
-version="0.7.4 RC2"
+version="0.7.5 RC2"
 
 function clear {
     echo -e '\033c'

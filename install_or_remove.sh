@@ -5,7 +5,24 @@ install_path="/usr/local/bin"
 
 function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
-echo "Local update or GitHub updagte"
+work_path=$(echo -e `pwd`)
+if [ ! -f /usr/local/bin/fishing ]; then
+    echo "Need Install Script to /usr/local/bin"
+    select opt in "Yes" "No"; 
+    do
+        case $opt in 
+            "Yes")
+                sudo cp ${work_path}/fishing /usr/local/bin && echo -e "Script installes"
+                exit 0
+                ;;
+            "No")
+                exit 0
+                ;;
+        esac
+    done
+fi
+
+echo "How to Update:"
     select opt in "Local" "GitHub"; 
     do
         case $opt in 
@@ -27,23 +44,6 @@ echo "Local update or GitHub updagte"
                 ;;
         esac
     done
-    
-work_path=$(echo -e `pwd`)
-if [ ! -f /usr/local/bin/fishing ]; then
-    echo "Need Install Script to /usr/local/bin"
-    select opt in "Yes" "No"; 
-    do
-        case $opt in 
-            "Yes")
-                sudo cp ${work_path}/fishing /usr/local/bin && echo -e "Script installes"
-                exit 0
-                ;;
-            "No")
-                exit 0
-                ;;
-        esac
-    done
-fi
 
 echo -e "Please wait few second. Scaning versions..."
 current_version=`${install_path}/fishing | grep -m 1 Version | cut -c 14-22`
@@ -66,25 +66,23 @@ else
                 exit 0
                 ;;
             "No")
-                exit 0
+                break
                 ;;
         esac
     done
 fi
 
-select opt in "Install" "Remove"; 
+echo "Want to REMOVE script "
+select opt in "Yes" "No"; 
 do
-    case $opt in
-    "Install")
-        sudo cp ${work_path}/fishing /usr/local/bin && echo -e "Script installed"
-        exit 0
-        ;;
-    "Remove")
-        sudo rm -rf /usr/local/bin/fishing && echo -e "Script removed"
-        exit 0
-        ;;
-    *) 
-        echo "invalid option $REPLY"
-        ;;
+    case $opt in 
+        "Yes")
+            sudo rm -rf /usr/local/bin/fishing && echo -e "Script removed"
+            exit 0
+            ;;
+        "No")
+            exit 0
+            ;;
     esac
 done
+
