@@ -1,4 +1,5 @@
 #!/bin/bash
+version="0.7.4 RC2"
 
 function clear {
     echo -e '\033c'
@@ -14,7 +15,7 @@ echo -e "\e[32mWelcome!\e[0m"
 echo -e "You are start to play in Console Fishing"
 echo -e "This is simple bash script, but to have so much fun."
 echo -e "\e[33mCreated by Redian23\e[0m"
-echo -e "\e[31mVersion 0.7.3 RC2\e[0m"
+echo -e "\e[31mVersion ${version}\e[0m"
 echo -e ""
 echo -e "Advices:"
 echo -e "\e[32m * For comfort play, please, open terminal on FullScreen\e[0m"
@@ -45,7 +46,10 @@ ENV=0
 key_1=''
 key_2=''
 keyboard_key=''
+
+#Other var's
 fish_value=0
+looze=0
 
 #------------------------------------------------------------/
 
@@ -82,6 +86,11 @@ check_console_size(){
     fi
 }
 
+you_are_select_text(){
+    echo -e "You are select ${opt}"
+    sleep 1s
+}
+
 key_map_menu(){
 stty echo
 echo -e "Select key mapping:"
@@ -92,16 +101,14 @@ echo -e "Select key mapping:"
             keyboard_key='F'
             key_1="f"   #Eng
             key_2="а"   #Rus
-            echo -e "You are select ${opt}"
-            sleep 1s
+            you_are_select_text
             break
             ;;
         "Key 'Space'")
             keyboard_key='Space'
             key_1=$'\x20'   #Space
             key_2=$'\x0a'   #Enter
-            echo -e "You are select ${opt}"
-            sleep 1s
+            you_are_select_text
             break
             ;;
         *) 
@@ -120,27 +127,22 @@ echo -e "Select difficulty level:"
         case $opt in
         "Easy")
             money=350
-            echo -e "You are select ${opt}"
-            sleep 1s
+            you_are_select_text
             break
             ;;
         "Medium")
             money=200
-            echo -e "You are select ${opt}"
-            sleep 1s
+            you_are_select_text
             break
             ;;
         "Hard")
             money=50
-            echo -e "You are select ${opt}"
-            sleep 1s
+            you_are_select_text
             break
             ;;
-
         "Expert")
             money=1
-            echo -e "You are select ${opt}"
-            sleep 1s
+            you_are_select_text
             break
             ;;
         *) 
@@ -235,8 +237,7 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_LAKE_POSITION1_2
             BITE_ANIMATION_3=$BITE_ANIMATION_LAKE_POSITION1_3
             
-            echo "you chose place 1"
-            sleep 0.5s
+            you_are_select_text
             break
             ;;
         "Place 2")
@@ -249,8 +250,7 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_LAKE_POSITION2_2
             BITE_ANIMATION_3=$BITE_ANIMATION_LAKE_POSITION2_3
             
-            echo "you chose place 2"
-            sleep 0.5s
+            you_are_select_text
             break
             ;;
         "Place 3")
@@ -263,8 +263,7 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_LAKE_POSITION3_2
             BITE_ANIMATION_3=$BITE_ANIMATION_LAKE_POSITION3_3
 
-            echo "you chose place 3"
-            sleep 0.5s
+            you_are_select_text
             break
             ;;
         *)  
@@ -289,8 +288,8 @@ do
             BITE_ANIMATION_1=$BITE_ANIMATION_RIVER_POSITION1_1
             BITE_ANIMATION_2=$BITE_ANIMATION_RIVER_POSITION1_2
             BITE_ANIMATION_3=$BITE_ANIMATION_RIVER_POSITION1_3
-            echo "you chose position 1"
-            sleep 0.5s
+            
+            you_are_select_text
             break
             ;;
         "Place 2")
@@ -303,8 +302,7 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_RIVER_POSITION2_2
             BITE_ANIMATION_3=$BITE_ANIMATION_RIVER_POSITION2_3
             
-            echo "you chose position 2"
-            sleep 0.5s
+            you_are_select_text
             break
             ;;
         "Place 3")
@@ -317,8 +315,7 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_RIVER_POSITION3_2
             BITE_ANIMATION_3=$BITE_ANIMATION_RIVER_POSITION3_3
 
-            echo "you chose position 3"
-            sleep 0.5s
+            you_are_select_text
             break
             ;;
         *)  
@@ -344,8 +341,7 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_OCEAN_POSITION1_2
             BITE_ANIMATION_3=$BITE_ANIMATION_OCEAN_POSITION1_3
             
-            echo "you chose position 1"
-            sleep 0.5s
+            you_are_select_text
             break
             ;;
         "Place 2")
@@ -358,8 +354,7 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_OCEAN_POSITION2_2
             BITE_ANIMATION_3=$BITE_ANIMATION_OCEAN_POSITION2_3
             
-            echo "you chose position 2"
-            sleep 0.5s
+            you_are_select_text
             break
             ;;
         "Place 3")
@@ -372,8 +367,7 @@ do
             BITE_ANIMATION_2=$BITE_ANIMATION_OCEAN_POSITION3_2
             BITE_ANIMATION_3=$BITE_ANIMATION_OCEAN_POSITION3_3
 
-            echo "you chose position 3"
-            sleep 0.5s
+            you_are_select_text
             break
             ;;
         "Quit")
@@ -395,25 +389,19 @@ do
     case $opt in
         "Small lake")
             POSITION_INDICATOR='lake_positions'
-            
-            echo -e "you chose Lake \n"
-            sleep 0.5s
+            you_are_select_text
             lake_positions
             break
             ;;
         "River")
             POSITION_INDICATOR='river_positions'
-            
-            echo -e "you chose river \n"
-            sleep 0.5s
+            you_are_select_text
             river_positions
             break
             ;;
         "Ocean")
             POSITION_INDICATOR='ocean_positions'
-            
-            echo -e "you chose ocean \n"
-            sleep 0.5s
+            you_are_select_text
             ocean_positions
             break
             ;;
@@ -426,19 +414,19 @@ done
 
 casting(){
     clear
-    echo "There is a cast ~"
+    echo "There is a cast /‾‾~"
     sleep 0.5s
     clear
-    echo "There is a cast ~~"
+    echo "There is a cast /‾‾‾~"
     sleep 0.5s
     clear
-    echo "There is a cast ~~~"
+    echo "There is a cast /‾‾‾‾~"
     sleep 0.5s  
     clear
-    echo "There is a cast ~~~~o"
+    echo "There is a cast /‾‾‾‾‾~o"
     sleep 0.5s
     clear
-    echo "There is a cast ~~~~(o)"
+    echo "There is a cast /‾‾‾‾‾~(o)"
     sleep 0.5s  
 }
 
@@ -689,7 +677,6 @@ stty echo
     done
 }
 
-looze=0
 result(){
 stty erase ^?
     if (( RANDOM % 2 )); 
@@ -717,7 +704,7 @@ while true;
 do
 read -rs -N 1 -t 1 input
     if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then
-        stty erase "$key_1" 2> /dev/null
+        stty erase "$key_1" 1> /dev/null
         ((PROGRESS+=1))
         sleep 0.05
         bar="${bar} "
@@ -783,7 +770,7 @@ done
 
 #Default settings to console when Emergency 
 status=$?
-if [[ $status -ne 0 || $status -ne 1 ]]; then
+if [ $status -ne 0 ]; then
     echo Emergency
     stty echo
     stty erase ^?

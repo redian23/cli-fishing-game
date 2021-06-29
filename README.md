@@ -1,13 +1,32 @@
-# console-fishing
+# Title:  console-fishing
 
 ## Bash script to play fishing on Terminal
 
-To start script:
+## To start localy script:
 ```
-./fish.sh
+./fishing
 or 
-bash fish.sh 
+bash fishing
 ```
+
+## Install 
+Script will be copy in /usr/local/bin direcroty.
+Need root password to install/remove.  
+
+1. Start install_or_remove.sh
+2. Select "Install"
+
+## Run
+user@domain:$ ``fishing`` 
+
+## Update
+1. Start install_or_remove.sh
+2. Select "Update"
+
+## Remove
+1. Start install_or_remove.sh
+2. Select "Remove"
+
 ## Positional Parameters
 Enable Demo mode:
 ``
