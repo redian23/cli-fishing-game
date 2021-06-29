@@ -48,6 +48,7 @@ else
                 exit 0
                 ;;
             "No")
+                rm -rf ~/Templates/console-fishing
                 exit 0
                 ;;
         esac
