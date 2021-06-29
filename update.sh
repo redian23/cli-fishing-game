@@ -4,23 +4,6 @@ install_path="/usr/local/bin"
 
 function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
-work_path=$(echo -e `pwd`)
-if [ ! -f /usr/local/bin/fishing ]; then
-    echo "You are want to install 'console-fishing' to /usr/local/bin"
-    select opt in "Yes" "No"; 
-    do
-        case $opt in 
-            "Yes")
-                sudo cp ${work_path}/fishing /usr/local/bin && echo -e "Script installes"
-                exit 0
-                ;;
-            "No")
-                exit 0
-                ;;
-        esac
-    done
-fi
-
 echo "How to Update:"
     select opt in "Local" "GitHub"; 
     do
@@ -65,23 +48,8 @@ else
                 exit 0
                 ;;
             "No")
-                break
+                exit 0
                 ;;
         esac
     done
 fi
-
-echo "You are want to REMOVE 'console-fishing'"
-select opt in "Yes" "No"; 
-do
-    case $opt in 
-        "Yes")
-            sudo rm -rf /usr/local/bin/fishing && echo -e "Script removed"
-            exit 0
-            ;;
-        "No")
-            exit 0
-            ;;
-    esac
-done
-

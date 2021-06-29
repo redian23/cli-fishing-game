@@ -8,25 +8,6 @@
 or 
 bash fishing
 ```
-
-## Install 
-Script will be copy in /usr/local/bin direcroty.
-Need root password to install/remove.  
-
-1. Start install_or_remove.sh
-2. Select "Install"
-
-## Run
-user@domain:$ ``fishing`` 
-
-## Update
-1. Start install_or_remove.sh
-2. Select "Update"
-
-## Remove
-1. Start install_or_remove.sh
-2. Select "Remove"
-
 ## Positional Parameters
 Enable Demo mode:
 ``
@@ -37,3 +18,24 @@ Enable Debug mode:
 ``
 (-d)(--debug)
 ``
+
+## Install 
+Script will be copy in /usr/local/bin direcroty.
+Need root password to install/update/remove.  
+```
+./install.sh
+```
+
+## Run
+user@domain:$ ``fishing `` 
+
+## Update
+```
+./update.sh
+```
+
+## Remove
+```
+./remove.sh
+```
+
