@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #PATH
 install_path="/usr/local/bin"
 
@@ -7,7 +6,7 @@ function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4
 
 work_path=$(echo -e `pwd`)
 if [ ! -f /usr/local/bin/fishing ]; then
-    echo "Need Install Script to /usr/local/bin"
+    echo "You are want to install 'console-fishing' to /usr/local/bin"
     select opt in "Yes" "No"; 
     do
         case $opt in 
@@ -36,9 +35,9 @@ echo "How to Update:"
                     rm -rf ~/Templates/console-fishing
                     git clone https://github.com/redian23/console-fishing.git ~/Templates/console-fishing && cd ~/Templates/console-fishing 
                     work_path=$(echo -e `pwd`)
-                
                 else
                     git clone https://github.com/redian23/console-fishing.git ~/Templates/console-fishing && cd ~/Templates/console-fishing
+                    work_path=$(echo -e `pwd`)
                 fi
                 break
                 ;;
@@ -46,8 +45,8 @@ echo "How to Update:"
     done
 
 echo -e "Please wait few second. Scaning versions..."
-current_version=`${install_path}/fishing | grep -m 1 Version | cut -c 14-22`
-new_version=`${work_path}/fishing | grep -m 1 Version | cut -c 14-22`
+new_version=`${work_path}/fishing | grep -m 1 Version | cut -c 14-19`
+current_version=`${install_path}/fishing | grep -m 1 Version | cut -c 14-19`
 
 echo -e "New version-> "$new_version
 echo -e "Current ver-> "$current_version
@@ -72,7 +71,7 @@ else
     done
 fi
 
-echo "Want to REMOVE script "
+echo "You are want to REMOVE 'console-fishing'"
 select opt in "Yes" "No"; 
 do
     case $opt in 

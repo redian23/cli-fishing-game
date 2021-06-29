@@ -1,5 +1,4 @@
 #!/bin/bash
-version="0.7.5 RC2"
 
 function clear {
     echo -e '\033c'
@@ -15,7 +14,7 @@ echo -e "\e[32mWelcome!\e[0m"
 echo -e "You are start to play in Console Fishing"
 echo -e "This is simple bash script, but to have so much fun."
 echo -e "\e[33mCreated by Redian23\e[0m"
-echo -e "\e[31mVersion ${version}\e[0m"
+echo -e "\e[31mVersion 0.7.5 RC3\e[0m"
 echo -e ""
 echo -e "Advices:"
 echo -e "\e[32m * For comfort play, please, open terminal on FullScreen\e[0m"
