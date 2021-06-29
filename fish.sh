@@ -14,7 +14,7 @@ echo -e "\e[32mWelcome!\e[0m"
 echo -e "You are start to play in Console Fishing"
 echo -e "This is simple bash script, but to have so much fun."
 echo -e "\e[33mCreated by Redian23\e[0m"
-echo -e "\e[31mVersion 0.7.1 RC2\e[0m"
+echo -e "\e[31mVersion 0.7.3 RC2\e[0m"
 echo -e ""
 echo -e "Advices:"
 echo -e "\e[32m * For comfort play, please, open terminal on FullScreen\e[0m"
@@ -602,25 +602,24 @@ gen_fish_weight
 lake_fish_selector(){
     if [ "$FISH_WEIGHT" -le "1000" ];then
         lake_fish=$(echo -e "\e[33mRoach\e[0m")
-        fish_value=5
+        fish_value=1
         
-
         elif [ "$FISH_WEIGHT" -le "2000" ];then
             lake_fish=$(echo -e "\e[32mRuff\e[0m")
-            fish_value=6
+            fish_value=2
 
         elif [ "$FISH_WEIGHT" -lt "3500" ];then
             lake_fish=$(echo -e "\e[35mBream\e[0m")
-            fish_value=8
+            fish_value=3
 
         elif [ "$FISH_WEIGHT" -ge "3500" ];then
             if (( RANDOM % 2 )); 
             then 
                 lake_fish=$(echo -e "\e[31mCarpe\e[0m");
-                fish_value=9
+                fish_value=4
             else 
                 lake_fish=$(echo -e "\e[34mPike\e[0m");
-                fish_value=10
+                fish_value=5
             fi
     fi
 }
@@ -628,24 +627,24 @@ lake_fish_selector(){
 ocean_fish_selector(){
     if [ "$FISH_WEIGHT" -le "2500" ];then
         ocean_fish=$(echo -e "\e[31mMackerel\e[0m")
-        fish_value=8
+        fish_value=3
 
         elif [ "$FISH_WEIGHT" -le "7500" ];then
             ocean_fish=$(echo -e "\e[32mTuna\e[0m")
-            fish_value=9
+            fish_value=4
 
         elif [ "$FISH_WEIGHT" -lt "12500" ];then
             ocean_fish=$(echo -e "\e[33mFlounder\e[0m")
-            fish_value=10
+            fish_value=5
 
         elif [ "$FISH_WEIGHT" -ge "12500" ];then
             if (( RANDOM % 2 )); 
             then 
                 ocean_fish=$(echo -e "\e[34mHalibut\e[0m");
-                fish_value=15
+                fish_value=6
             else 
                 ocean_fish=$(echo -e "\e[34mShark\e[0m");
-                fish_value=20
+                fish_value=7
             fi
     fi
 }
@@ -660,7 +659,7 @@ clear
         else
             lake_fish_selector
             echo -e $lake_fish
-            echo -e "${lake_fish} sale ${fish_value}% by weight"
+            echo -e "$lake_fish sale ${fish_value}% by weight"
         fi
     echo "WEIGHT: $FISH_WEIGHT g."
 }
@@ -692,7 +691,7 @@ stty echo
 
 looze=0
 result(){
-    
+stty erase ^?
     if (( RANDOM % 2 )); 
         then 
             looze=0
@@ -751,6 +750,7 @@ done
 
 quit_menu(){
 stty echo
+stty erase ^?
 
 clear
 echo "You have a ${money}$
