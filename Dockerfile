@@ -1,8 +1,10 @@
-FROM alpine:3.8
+FROM alpine:latest
 
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git 
+    apk add --no-cache bash git coreutils
 
 RUN git clone https://github.com/redian23/console-fishing.git
+
 WORKDIR /console-fishing
+
 ENTRYPOINT ["/console-fishing/./fishing"]
