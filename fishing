@@ -19,7 +19,7 @@ echo -e ""
 echo -e "Advices:"
 echo -e "\e[32m * For comfort play, please, open terminal on FullScreen\e[0m"
 echo -e "\e[35m * Please, use <Eng> Keyboard Layout\e[0m"
-echo -e "\e[33m * Looks like better on KDE (kde console)\e[0m"
+echo -e "\e[33m * To select menu item use keys '1' or '2'\e[0m"
 sleep 5s
 
 #------------------------------------------------------------/
@@ -156,14 +156,16 @@ stty echo
 
 clear
 echo -e "\e[33mYou are have a ${money}$\e[0m"
-echo "
+echo -e "
 List fish-rod's:
-*  Name:                        Price:  Max Weith:
-1. Stick with thread            0$      1kg;
-2. Fish Liter N5;               100$;   5kg; 
-3. Fish Hunter Pro M10RT;       250$;   10kg; 
-4. Fish Kung Fu Master R20V;    450$;   20kg; 
-
+-----------------------------------------------------
+*  Name:                      | Price: | Max Weith: |
+-----------------------------------------------------
+1. Stick with thread          | 0$     | 1kg;       |  
+2. Fish Liter N5;             | 100$;  | 5kg;       |
+3. Fish Hunter Pro M10RT;     | 250$;  | 10kg;      |
+4. Fish Kung Fu Master R20V;  | 450$;  | 20kg;      |
+-----------------------------------------------------
 Selecte Fish-rod:"
 
 fish_rods_list=("Stick" "Fish Liter N5" "Fish Hunter Pro M10RT" "Fish Kung Fu Master R20V")
@@ -456,6 +458,7 @@ text_catcha(){
 }
 
 waiting(){
+stty -echo
 gen_env
     while :
     do
@@ -702,7 +705,7 @@ bar=''
 while true;
 do
 read -rs -N 1 -t 1 input
-    if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then
+    if [[ "$input" == "$key_1" || "$input" == "$key_2" ]]; then
         stty erase "$key_1" 1> /dev/null
         ((PROGRESS+=1))
         sleep 0.05
