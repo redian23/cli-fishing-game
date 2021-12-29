@@ -521,14 +521,15 @@ do
     stty erase "${key_1}"
     ((bite_animation_time--))
 
-    if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then 
-        break;
-    fi
-
     clear
         echo -e $BITE_ANIMATION_1
         echo -e "\e[31mTo catch fish hold down the ${keyboard_key} .\e[0m"   
     sleep 0.5s
+    
+    if [[ "$input" = "$key_1" || "$input" = "$key_2" ]]; then 
+        break;
+    fi
+    
     clear
         echo -e $BITE_ANIMATION_2
         echo -e "\rTo catch fish hold down the ${keyboard_key} .."
