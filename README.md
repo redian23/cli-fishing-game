@@ -29,14 +29,6 @@ Script will be copy in /usr/local/bin direcroty.
 ## Run
 user@domain: $ ``fishing `` 
 
-## Update
-```
-./update.sh
-```
-
-## Remove
-```
-./remove.sh
 ```
 # Install and Run on Other OS:
 
