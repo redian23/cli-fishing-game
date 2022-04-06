@@ -29,7 +29,6 @@ Script will be copy in /usr/local/bin direcroty.
 ## Run
 user@domain: $ ``fishing `` 
 
-```
 # Install and Run on Other OS:
 
 ## Windows
