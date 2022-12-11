@@ -11,8 +11,8 @@ bash fishing
 ## Positional Parameters
 Enable Demo mode:
 ``
-(-dm)(--demo)\
-``
+(-dm)(--demo)
+``\
 Enable Debug mode:
 ``
 (-d)(--debug)
