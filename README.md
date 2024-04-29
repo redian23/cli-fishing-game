@@ -1,4 +1,4 @@
-# Title:  console-fishing
+# Title:  cli-fishing
 **Bash script to play fishing on Terminal**
 
 # Linux
